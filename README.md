@@ -27,12 +27,13 @@ Continuous Integration.
 
 ## Coordination Roles
 
-| Role | Assigned Member |
-|---|---|
-| Coordinator | Koparnika |
-| QA Lead | Vijaha |
-| GitHub/CI Lead | Aadhil |
-| Review Lead | Sinthu |
+| Role | Assigned Member | Responsibility |
+|---|---|---|
+| Coordinator | Koparnika | Manage team activities, deadlines and GitHub Projects |
+| Co-Coordinator | Sumaiya | Assist with team coordination, requirements Issues and task tracking |
+| QA Lead | Vijaha | Coordinate testing and quality assurance |
+| GitHub/CI Lead | Aadhil | Manage GitHub repository and CI workflow |
+| Review Lead | Sinthu | Coordinate peer reviews and maintain the review checklist |
 
 ## Functional Requirements
 
