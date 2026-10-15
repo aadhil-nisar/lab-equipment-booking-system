@@ -20,10 +20,10 @@ Continuous Integration.
 | Member | GitHub Username | REG No | Module | Responsibility |
 |---|---|---|---|---|
 | Aadhil | aadhil-nisar | ASP/2023/061 | M5 | Approval, Integration and CI |
-| Koparnika | koparnikasrikaran2002-gif | ASP/2023/061 | M1 | Accounts and Authentication |
-| Sinthu | sinthu02 | ASP/2023/061 | M2 | Equipment Catalogue |
-| Sumaiya | fathimasumaiya884-collab | ASP/2023/061 | M3 | Booking Form and Model |
-| Vijaha | HasVij | ASP/2023/061 | M4 | Booking Validation and Tests |
+| Koparnika | koparnikasrikaran2002-gif | ASP/2023/082 | M1 | Accounts and Authentication |
+| Sinthu | sinthu02 | ASP/2023/163 | M2 | Equipment Catalogue |
+| Sumaiya | fathimasumaiya884-collab | ASB/2023/0085 | M3 | Booking Form and Model |
+| Vijaha | HasVij | ASB/2023/087 | M4 | Booking Validation and Tests |
 
 ## Coordination Roles
 
