@@ -17,13 +17,13 @@ Continuous Integration.
 
 ## Team Members and Module Allocation
 
-| Member | GitHub Username | Module | Responsibility |
-|---|---|---|---|
-| Aadhil | aadhil-nisar | M5 | Approval, Integration and CI |
-| Koparnika | koparnikasrikaran2002-gif | M1 | Accounts and Authentication |
-| Sinthu | sinthu02 | M2 | Equipment Catalogue |
-| Sumaiya | fathimasumaiya884-collab | M3 | Booking Form and Model |
-| Vijaha | HasVij | M4 | Booking Validation and Tests |
+| Member | GitHub Username | REG No | Module | Responsibility |
+|---|---|---|---|---|
+| Aadhil | aadhil-nisar | ASP/2023/061 | M5 | Approval, Integration and CI |
+| Koparnika | koparnikasrikaran2002-gif | ASP/2023/061 | M1 | Accounts and Authentication |
+| Sinthu | sinthu02 | ASP/2023/061 | M2 | Equipment Catalogue |
+| Sumaiya | fathimasumaiya884-collab | ASP/2023/061 | M3 | Booking Form and Model |
+| Vijaha | HasVij | ASP/2023/061 | M4 | Booking Validation and Tests |
 
 ## Coordination Roles
 
