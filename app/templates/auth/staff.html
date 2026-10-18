@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Staff Dashboard - Lab Equipment Booking System</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 40px 15px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 40px auto;
+            background-color: white;
+            padding: 35px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #253858;
+        }
+
+        .role {
+            background-color: #dcfce7;
+            padding: 12px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+
+        a {
+            display: inline-block;
+            padding: 12px 20px;
+            margin-top: 12px;
+            background-color: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <main class="container">
+
+        <h1>Staff Dashboard</h1>
+
+        <p>
+            Welcome, {{ current_user.username }}!
+        </p>
+
+        <div class="role">
+            <strong>Role:</strong>
+            {{ current_user.role }}
+        </div>
+
+        <p>
+            This page is accessible only to Staff accounts.
+        </p>
+
+        <p>
+            Equipment management will be connected
+            during FR-01 development.
+        </p>
+
+        <p>
+            Booking approval functionality is planned
+            for E3.
+        </p>
+
+        <a href="{{ url_for('index') }}">
+            Back to Home
+        </a>
+
+    </main>
+</body>
+</html>

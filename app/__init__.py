@@ -1,9 +1,11 @@
 
+import os
+import secrets
 from pathlib import Path
 
 from flask import Flask, render_template
 
-from .extensions import db
+from .extensions import csrf, db, login_manager
 
 
 def create_app(test_config=None):
@@ -15,6 +17,10 @@ def create_app(test_config=None):
     )
 
     app.config.update(
+        SECRET_KEY=(
+            os.environ.get("SECRET_KEY")
+            or secrets.token_hex(32)
+        ),
         SQLALCHEMY_DATABASE_URI="sqlite:///lab_equipment.db",
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
     )
@@ -23,6 +29,16 @@ def create_app(test_config=None):
         app.config.update(test_config)
 
     db.init_app(app)
+    login_manager.init_app(app)
+    csrf.init_app(app)
+
+    from .routes.auth import auth_bp
+
+    app.register_blueprint(auth_bp)
+    
+    from .commands import create_staff
+
+    app.cli.add_command(create_staff)
 
     @app.get("/")
     def index():
