@@ -253,12 +253,69 @@ The E1 deliverables are:
 
 The complete functional application is not expected at E1.
 
+
+## E2 - Accounts and Authentication
+
+FR-00 provides:
+
+- Student registration
+- Login and logout
+- Hashed password storage
+- Student and Staff roles
+- Staff-only access restrictions
+- Automated authentication tests
+
+### Student Registration
+
+Run Flask and open:
+
+http://127.0.0.1:5000/auth/register
+
+Public registration creates Student accounts only.
+
+### Login
+
+http://127.0.0.1:5000/auth/login
+
+### Staff Account Setup
+
+Staff accounts are created through a terminal command:
+
+```powershell
+python -m flask --app app create-staff
+```
+
+Follow the interactive prompts for username, email
+and password.
+
+Do not put Staff passwords in the README or GitHub.
+
+### Local Secret Key
+
+For a stable development session, configure SECRET_KEY
+as an environment variable before starting Flask.
+
+Example using Windows PowerShell:
+
+```powershell
+$env:SECRET_KEY = (python -c "import secrets; print(secrets.token_hex(32))")
+```
+
+### Authentication Tests
+
+```powershell
+python -m pytest tests/test_auth.py -v
+```
+
+### E2 Scope
+
+FR-00 provides working accounts and role restrictions.
+
+Equipment management and booking features are integrated
+through the other E2 modules.
+
+
 ## Future Development
-
-E2 Evaluation: 19 October 2026
-
-Continue implementation of accounts, equipment catalogue,
-booking requests and booking validation.
 
 E3 Evaluation: 23 October 2026
 

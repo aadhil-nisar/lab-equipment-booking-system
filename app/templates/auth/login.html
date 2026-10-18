@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Login - Lab Equipment Booking System</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            padding: 40px 15px;
+        }
+
+        .container {
+            max-width: 420px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #253858;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 22px;
+            padding: 12px;
+            background-color: #2563eb;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .links {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .message {
+            padding: 10px;
+            background: #eef2ff;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <main class="container">
+
+        <h1>Login</h1>
+
+        {% for message in get_flashed_messages() %}
+            <p class="message" role="alert">
+                {{ message }}
+            </p>
+        {% endfor %}
+
+        <form method="POST">
+
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+            >
+
+            <label for="username">Username</label>
+            <input
+                type="text"
+                id="username"
+                name="username"
+                required
+            >
+
+            <label for="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                required
+            >
+
+            <button type="submit">Login</button>
+
+        </form>
+
+        <div class="links">
+            <p>
+                Don't have an account?
+                <a href="{{ url_for('auth.register') }}">
+                    Register
+                </a>
+            </p>
+
+            <p>
+                <a href="{{ url_for('index') }}">
+                    Back to Home
+                </a>
+            </p>
+        </div>
+
+    </main>
+
+</body>
+</html>

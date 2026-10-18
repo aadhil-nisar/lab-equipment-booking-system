@@ -7,10 +7,75 @@
           content="width=device-width, initial-scale=1.0">
 
     <title>Lab Equipment Booking System</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 40px 15px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 40px auto;
+            padding: 35px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #253858;
+        }
+
+        p {
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 22px;
+            margin: 8px;
+            background-color: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        .logout {
+            background-color: #dc2626;
+        }
+
+        .status {
+            margin-top: 25px;
+            padding: 12px;
+            background-color: #e0f2fe;
+            border-radius: 6px;
+        }
+
+        .message {
+            padding: 10px;
+            background-color: #dcfce7;
+            margin: 12px 0;
+            border-radius: 6px;
+        }
+    </style>
 </head>
+
 <body>
 
-    <main>
+    <main class="container">
+
         <h1>Lab Equipment Booking System</h1>
 
         <p>
@@ -18,14 +83,75 @@
         </p>
 
         <p>
-            Students will be able to request laboratory
-            equipment bookings, and staff will manage
-            equipment and booking requests.
+            Students can request laboratory equipment
+            bookings, and lab staff can manage equipment
+            and booking requests.
         </p>
 
-        <h2>Project Status</h2>
+        {% for message in get_flashed_messages() %}
+            <p class="message" role="status">
+                {{ message }}
+            </p>
+        {% endfor %}
 
-        <p>E1 - Initial Flask and Database Setup</p>
+        {% if current_user.is_authenticated %}
+
+            <h2>Welcome, {{ current_user.username }}!</h2>
+
+            <p>
+                Your Role:
+                <strong>{{ current_user.role }}</strong>
+            </p>
+
+            {% if current_user.is_staff %}
+                <a
+                    class="btn"
+                    href="{{ url_for('auth.staff_page') }}"
+                >
+                    Staff Area
+                </a>
+            {% endif %}
+
+            <form
+                method="POST"
+                action="{{ url_for('auth.logout') }}"
+            >
+                <input
+                    type="hidden"
+                    name="csrf_token"
+                    value="{{ csrf_token() }}"
+                >
+
+                <button class="btn logout" type="submit">
+                    Logout
+                </button>
+            </form>
+
+        {% else %}
+
+            <h2>Get Started</h2>
+
+            <a
+                class="btn"
+                href="{{ url_for('auth.register') }}"
+            >
+                Register
+            </a>
+
+            <a
+                class="btn"
+                href="{{ url_for('auth.login') }}"
+            >
+                Login
+            </a>
+
+        {% endif %}
+
+        <div class="status">
+            <strong>Project Status:</strong>
+            E2 - Accounts and Authentication
+        </div>
+
     </main>
 
 </body>
