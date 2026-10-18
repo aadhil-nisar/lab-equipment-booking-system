@@ -12,6 +12,7 @@ from flask import (
 )
 from flask_login import current_user, login_required
 
+from ..booking_validation import validate_booking_slot
 from ..extensions import db
 from ..models.booking import Booking
 from ..models.equipment import Equipment
@@ -92,12 +93,20 @@ def read_booking_form():
             "Equipment is out of service.",
         )
 
-    if end_time <= start_time:
+
+    validation_error = validate_booking_slot(
+        booking_date,
+        start_time,
+        end_time,
+    )
+
+    if validation_error:
         return (
             values,
             None,
-            "End time must be after start time.",
+            validation_error,
         )
+
 
     parsed = {
         "equipment_id": equipment.id,
