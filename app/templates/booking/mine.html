@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Booking Requests</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 40px 15px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            color: #253858;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #e0f2fe;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .pending {
+            color: #a16207;
+            font-weight: bold;
+        }
+
+        .approved {
+            color: #15803d;
+            font-weight: bold;
+        }
+
+        .rejected {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 11px 16px;
+            margin: 10px 5px 10px 0;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        .message {
+            padding: 12px;
+            background: #dcfce7;
+            margin-top: 12px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<main class="container">
+
+    <h1>My Booking Requests</h1>
+
+    <p>
+        Student:
+        <strong>{{ current_user.username }}</strong>
+    </p>
+
+    {% for message in get_flashed_messages() %}
+        <p class="message" role="status">
+            {{ message }}
+        </p>
+    {% endfor %}
+
+    <a
+        class="btn"
+        href="{{ url_for('booking.new') }}"
+    >
+        New Booking Request
+    </a>
+
+    <a
+        class="btn"
+        href="{{ url_for('index') }}"
+    >
+        Home
+    </a>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Booking ID</th>
+                    <th>Equipment</th>
+                    <th>Date</th>
+                    <th>Start</th>
+                    <th>End</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for booking in bookings %}
+                    <tr>
+                        <td>{{ booking.id }}</td>
+
+                        <td>
+                            {% if booking.equipment %}
+                                {{ booking.equipment.name }}
+                            {% else %}
+                                Equipment unavailable
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {{ booking.booking_date.strftime(
+                                '%Y-%m-%d'
+                            ) }}
+                        </td>
+
+                        <td>
+                            {{ booking.start_time.strftime(
+                                '%H:%M'
+                            ) }}
+                        </td>
+
+                        <td>
+                            {{ booking.end_time.strftime(
+                                '%H:%M'
+                            ) }}
+                        </td>
+
+                        <td>
+                            <span class="{{ booking.status|lower }}">
+                                {{ booking.status }}
+                            </span>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="6">
+                            You have not submitted any
+                            booking requests yet.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</main>
+
+</body>
+</html>
