@@ -104,6 +104,22 @@
             </p>
 	<a class="btn"
    		href="{{ url_for('equipment.catalogue') }}">
+
+
+{% if not current_user.is_staff %}
+
+    <a class="btn"
+       href="{{ url_for('booking.new') }}">
+        Request Equipment
+    </a>
+
+    <a class="btn"
+       href="{{ url_for('booking.mine') }}">
+        My Booking Requests
+    </a>
+
+{% endif %}
+
    		Equipment Catalogue
 	</a>
             {% if current_user.is_staff %}

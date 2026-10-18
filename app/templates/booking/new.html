@@ -1,0 +1,214 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Request Equipment Booking</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 40px 15px;
+        }
+
+        .container {
+            max-width: 540px;
+            margin: auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #253858;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 17px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 11px;
+            margin-top: 6px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 18px;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .secondary {
+            background: #475569;
+        }
+
+        .message {
+            background: #fee2e2;
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 5px;
+        }
+
+        .notice {
+            background: #e0f2fe;
+            padding: 12px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<main class="container">
+
+    <h1>Request Equipment Booking</h1>
+
+    <p>
+        Submit a request to use laboratory equipment.
+    </p>
+
+    <p>
+        Student:
+        <strong>{{ current_user.username }}</strong>
+    </p>
+
+    {% for message in get_flashed_messages() %}
+        <p class="message" role="alert">
+            {{ message }}
+        </p>
+    {% endfor %}
+
+    {% if not equipment_items %}
+        <p class="notice">
+            No available equipment at the moment.
+            Please try again later.
+        </p>
+    {% else %}
+
+        <form method="POST">
+
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+            >
+
+            <label for="equipment_id">
+                Select Equipment
+            </label>
+
+            <select
+                id="equipment_id"
+                name="equipment_id"
+                required
+            >
+                <option value="">
+                    -- Select Equipment --
+                </option>
+
+                {% for equipment in equipment_items %}
+                    <option
+                        value="{{ equipment.id }}"
+                        {% if form_data.get('equipment_id')
+                              == equipment.id|string %}
+                            selected
+                        {% endif %}
+                    >
+                        {{ equipment.name }}
+                        ({{ equipment.category }})
+                    </option>
+                {% endfor %}
+            </select>
+
+            <label for="booking_date">
+                Booking Date
+            </label>
+
+            <input
+                type="date"
+                id="booking_date"
+                name="booking_date"
+                value="{{ form_data.get(
+                    'booking_date', ''
+                ) }}"
+                required
+            >
+
+            <label for="start_time">
+                Start Time
+            </label>
+
+            <input
+                type="time"
+                id="start_time"
+                name="start_time"
+                value="{{ form_data.get(
+                    'start_time', ''
+                ) }}"
+                required
+            >
+
+            <label for="end_time">
+                End Time
+            </label>
+
+            <input
+                type="time"
+                id="end_time"
+                name="end_time"
+                value="{{ form_data.get(
+                    'end_time', ''
+                ) }}"
+                required
+            >
+
+            <p class="notice">
+                New booking requests are initially
+                marked as Pending.
+            </p>
+
+            <button class="btn" type="submit">
+                Submit Booking Request
+            </button>
+
+        </form>
+
+    {% endif %}
+
+    <a
+        class="btn secondary"
+        href="{{ url_for('booking.mine') }}"
+    >
+        My Booking Requests
+    </a>
+
+    <a
+        class="btn secondary"
+        href="{{ url_for('equipment.catalogue') }}"
+    >
+        Equipment Catalogue
+    </a>
+
+</main>
+
+</body>
+</html>
