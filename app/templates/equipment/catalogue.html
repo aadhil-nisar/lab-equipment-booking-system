@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <title>Equipment Catalogue</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            padding: 30px 15px;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            color: #253858;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background: #e0f2fe;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            padding: 9px 14px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .danger {
+            background: #dc2626;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .actions form {
+            margin: 0;
+        }
+
+        .message {
+            padding: 12px;
+            background: #e0f2fe;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        .filter {
+            margin: 20px 0;
+        }
+
+        select {
+            padding: 9px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        .status {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+<main class="container">
+
+    <h1>Equipment Catalogue</h1>
+
+    <p>View laboratory equipment and its availability.</p>
+
+    <p>
+        Logged in as:
+        <strong>{{ current_user.username }}</strong>
+        ({{ current_user.role }})
+    </p>
+
+    {% for message in get_flashed_messages() %}
+        <div class="message" role="status">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <a class="btn" href="{{ url_for('index') }}">
+        Home
+    </a>
+
+    {% if current_user.is_staff %}
+        <a class="btn" href="{{ url_for('equipment.add') }}">
+            Add Equipment
+        </a>
+    {% endif %}
+
+    <form class="filter" method="GET"
+          action="{{ url_for('equipment.catalogue') }}">
+
+        <label for="category">Filter by category:</label>
+
+        <select name="category" id="category">
+            <option value="">All Categories</option>
+
+            {% for category in categories %}
+                <option value="{{ category }}"
+                    {% if category == selected_category %}
+                        selected
+                    {% endif %}>
+                    {{ category }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button class="btn" type="submit">
+            Filter
+        </button>
+    </form>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Status</th>
+
+                    {% if current_user.is_staff %}
+                        <th>Actions</th>
+                    {% endif %}
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for item in equipment_items %}
+                    <tr>
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.category }}</td>
+                        <td>{{ item.description }}</td>
+                        <td class="status">
+                            {{ item.status }}
+                        </td>
+
+                        {% if current_user.is_staff %}
+                            <td>
+                                <div class="actions">
+                                    <a class="btn"
+                                       href="{{ url_for(
+                                           'equipment.edit',
+                                           equipment_id=item.id
+                                       ) }}">
+                                        Edit
+                                    </a>
+
+                                    <form method="POST"
+                                          action="{{ url_for(
+                                              'equipment.delete',
+                                              equipment_id=item.id
+                                          ) }}">
+
+                                        <input type="hidden"
+                                               name="csrf_token"
+                                               value="{{ csrf_token() }}">
+
+                                        <button
+                                            class="btn danger"
+                                            type="submit">
+                                            Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="{% if current_user.is_staff %}6{% else %}5{% endif %}">
+                            No equipment found.
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</main>
+</body>
+</html>

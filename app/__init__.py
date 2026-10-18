@@ -35,6 +35,10 @@ def create_app(test_config=None):
     from .routes.auth import auth_bp
 
     app.register_blueprint(auth_bp)
+
+    from .routes.equipment import equipment_bp
+
+    app.register_blueprint(equipment_bp)
     
     from .commands import create_staff
 
