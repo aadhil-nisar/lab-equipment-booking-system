@@ -309,10 +309,166 @@ python -m pytest tests/test_auth.py -v
 
 ### E2 Scope
 
+
+## E2 - Accounts and Authentication
+
+FR-00 provides:
+
+- Student registration
+- Login and logout
+- Hashed password storage
+- Student and Staff roles
+- Staff-only access restrictions
+- Automated authentication tests
+
+### Student Registration
+
+Run Flask and open:
+
+http://127.0.0.1:5000/auth/register
+
+Public registration creates Student accounts only.
+
+### Login
+
+http://127.0.0.1:5000/auth/login
+
+### Staff Account Setup
+
+Staff accounts are created through a terminal command:
+
+```powershell
+python -m flask --app app create-staff
+```
+
+Follow the interactive prompts for username, email
+and password.
+
+Do not put Staff passwords in the README or GitHub.
+
+### Local Secret Key
+
+For a stable development session, configure SECRET_KEY
+as an environment variable before starting Flask.
+
+Example using Windows PowerShell:
+
+```powershell
+$env:SECRET_KEY = (python -c "import secrets; print(secrets.token_hex(32))")
+```
+
+### Authentication Tests
+
+```powershell
+python -m pytest tests/test_auth.py -v
+```
+
+### E2 Scope
+
 FR-00 provides working accounts and role restrictions.
 
 Equipment management and booking features are integrated
 through the other E2 modules.
+
+
+## E2 - FR-01 Equipment Catalogue
+
+**Module Owner:** Sinthu (`sinthu02`)
+
+### Features
+
+FR-01 implements:
+
+- Equipment listing for authenticated users.
+- Category filtering.
+- Staff-only equipment creation.
+- Staff-only equipment editing.
+- Staff-only equipment deletion.
+- Equipment status: Available or Out of service.
+- Server-side input validation and role restrictions.
+
+### Equipment Fields
+
+| Field | Description |
+|---|---|
+| ID | Automatically generated identifier |
+| Name | Required, maximum 120 characters |
+| Category | Required, maximum 80 characters |
+| Description | Optional text, maximum 2000 characters in forms |
+| Status | Available or Out of service |
+
+### Access Control
+
+| Action | Student | Staff |
+|---|---|---|
+| View catalogue | Yes | Yes |
+| Filter category | Yes | Yes |
+| Add equipment | No | Yes |
+| Edit equipment | No | Yes |
+| Delete equipment | No | Yes |
+
+Users must log in before accessing the catalogue.
+
+### Run the Equipment Catalogue
+
+Start Flask:
+
+```powershell
+python -m flask --app app run
+```
+
+Log in and open:
+
+http://127.0.0.1:5000/equipment/
+
+Staff accounts are created using:
+
+```powershell
+python -m flask --app app create-staff
+```
+
+### Automated Tests
+
+Run FR-01 tests:
+
+```powershell
+python -m pytest tests/test_equipment.py -v
+```
+
+Run all tests:
+
+```powershell
+python -m pytest -v
+```
+
+Run Ruff:
+
+```powershell
+python -m ruff check .
+```
+
+Run coverage:
+
+```powershell
+python -m pytest --cov=app --cov-report=term-missing
+```
+
+### GitHub Information
+
+- Requirement: FR-01
+- Issue: #2
+- Implementation owner: Sinthu
+- Reviewer: Vijaha
+- Integration: Aadhil
+
+### Integration Note
+
+FR-02 Booking Requests will use the existing
+Equipment database records.
+
+The Equipment model is preserved from E1.
+Deletion rules for equipment linked to bookings
+must be reviewed when FR-02 is integrated.
 
 
 ## Future Development

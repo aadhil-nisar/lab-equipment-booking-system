@@ -102,7 +102,10 @@
                 Your Role:
                 <strong>{{ current_user.role }}</strong>
             </p>
-
+	<a class="btn"
+   		href="{{ url_for('equipment.catalogue') }}">
+   		Equipment Catalogue
+	</a>
             {% if current_user.is_staff %}
                 <a
                     class="btn"

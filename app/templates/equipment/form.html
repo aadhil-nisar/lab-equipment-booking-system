@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% if equipment %}Edit{% else %}Add{% endif %}
+        Equipment
+    </title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            padding: 40px 15px;
+        }
+
+        .container {
+            max-width: 520px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        h1 {
+            color: #253858;
+        }
+
+        label {
+            display: block;
+            margin-top: 16px;
+            font-weight: bold;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        textarea {
+            min-height: 100px;
+        }
+
+        button, .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 5px;
+            background: #2563eb;
+            color: white;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        .message {
+            background: #fee2e2;
+            padding: 12px;
+            margin-top: 15px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+<main class="container">
+
+    <h1>
+        {% if equipment %}
+            Edit Equipment
+        {% else %}
+            Add Equipment
+        {% endif %}
+    </h1>
+
+    {% for message in get_flashed_messages() %}
+        <p class="message" role="alert">
+            {{ message }}
+        </p>
+    {% endfor %}
+
+    <form method="POST">
+
+        <input type="hidden"
+               name="csrf_token"
+               value="{{ csrf_token() }}">
+
+        <label for="name">Equipment Name</label>
+
+        <input type="text"
+               id="name"
+               name="name"
+               maxlength="120"
+               value="{{ form_data.get(
+                   'name',
+                   equipment.name if equipment else ''
+               ) }}"
+               required>
+
+        <label for="category">Category</label>
+
+        <input type="text"
+               id="category"
+               name="category"
+               maxlength="80"
+               value="{{ form_data.get(
+                   'category',
+                   equipment.category if equipment else ''
+               ) }}"
+               required>
+
+        <label for="description">Description</label>
+
+        <textarea id="description"
+                  name="description"
+                  maxlength="2000">{{ form_data.get(
+                      'description',
+                      equipment.description if equipment else ''
+                  ) }}</textarea>
+
+        <label for="status">Equipment Status</label>
+
+        {% set chosen_status = form_data.get(
+            'status',
+            equipment.status if equipment else 'Available'
+        ) %}
+
+        <select name="status" id="status" required>
+            {% for status in statuses %}
+                <option value="{{ status }}"
+                    {% if chosen_status == status %}
+                        selected
+                    {% endif %}>
+                    {{ status }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">
+            {% if equipment %}
+                Save Changes
+            {% else %}
+                Add Equipment
+            {% endif %}
+        </button>
+
+        <a class="btn"
+           href="{{ url_for('equipment.catalogue') }}">
+            Cancel
+        </a>
+
+    </form>
+
+</main>
+</body>
+</html>
