@@ -80,7 +80,7 @@ Each team member contributes through development, testing, peer review, integrat
 | FR-00 | Accounts and Login | [#1](https://github.com/aadhil-nisar/lab-equipment-booking-system/issues/1) | Koparnika | Completed and merged |
 | FR-01 | Equipment Catalogue | [#2](https://github.com/aadhil-nisar/lab-equipment-booking-system/issues/2) | Sinthu | Completed and merged |
 | FR-02 | Booking Requests | [#3](https://github.com/aadhil-nisar/lab-equipment-booking-system/issues/3) | Sumaiya | Completed and merged |
-| FR-03 | Booking Validation | [#4](https://github.com/aadhil-nisar/lab-equipment-booking-system/issues/4) | Vijaha | Initial E2 validation merged; E3 overlap work remaining |
+| FR-03 | Booking Validation | [#4](https://github.com/aadhil-nisar/lab-equipment-booking-system/issues/4) | Vijaha | Initial E2 validation Pull requested; Merging E3 overlap work remaining |
 | FR-04 | Booking Approval and Status | [#5](https://github.com/aadhil-nisar/lab-equipment-booking-system/issues/5) | Aadhil | Planned for E3 |
 
 ### Current Implementation Status
