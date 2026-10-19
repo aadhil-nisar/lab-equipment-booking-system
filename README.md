@@ -1,556 +1,1621 @@
-# Lab Equipment Booking System
+Lab Equipment Booking System
 
-**Software Engineering Mini Project**
-**Repository:** https://github.com/aadhil-nisar/lab-equipment-booking-system
+Software Engineering Mini Project
 
-## 1. Project Overview
+Repository: https://github.com/aadhil-nisar/lab-equipment-booking-system
 
-The **Lab Equipment Booking System** is a Flask-based web application that lets Students browse laboratory equipment, submit booking requests, and track their requests. Lab Staff can maintain the equipment catalogue. Staff booking approvals and complete booking-conflict validation are planned for the final evaluation.
+Current Evaluation: E2 — Intermediate Review
+Evaluation Date: Monday, 19 October 2026
+E2 Status: Development requirements completed; final demonstration and documentation verification
 
-The project also demonstrates software engineering practices: requirements as GitHub Issues, a GitHub Projects board, feature branches, pull requests (PRs), peer reviews, automated tests, code-quality checks, continuous integration (CI), and team collaboration.
+1. Project Overview
 
-### Evaluation milestones
+The Lab Equipment Booking System is a web-based application developed using Python, Flask and SQLite.
 
-| Evaluation | Date | Scope |
-|---|---|---|
-| E1 — Initial Review | 14 October 2026 | Repository, team roles, Issues/board, Flask and SQLite foundation, tests, CI, and review checklist |
-| E2 — Intermediate Review | 19 October 2026 | Working FR-00, FR-01, FR-02; initial FR-03 validation/testing progress; reviewed PRs and CI |
-| E3 — Final Review | 23 October 2026 | Complete FR-03, FR-04 Staff approval, integration, testing, and final documentation |
+The application allows:
 
-## 2. Team Members and Module Allocation
+Students to register and log in.
 
-| Member | GitHub username | Registration number | Module | Responsibility |
-|---|---|---|---|---|
-| Aadhil | `aadhil-nisar` | ASP/2023/061 | M5 | Booking Approval, Integration and CI |
-| Koparnika | `koparnikasrikaran2002-gif` | ASP/2023/082 | M1 | Accounts and Authentication (FR-00) |
-| Sinthu | `sinthu02` | ASP/2023/163 | M2 | Equipment Catalogue (FR-01) |
-| Sumaiya | `fathimasumaiya884-collab` | ASB/2023/0085 | M3 | Booking Form and Model (FR-02) |
-| Vijaha | `HasVij` | ASB/2023/087 | M4 | Booking Validation and Tests (FR-03) |
+Students to view and filter laboratory equipment.
 
-### Coordination roles
+Students to submit equipment booking requests.
 
-| Role | Member | Responsibility |
-|---|---|---|
-| Coordinator | **Koparnika** | Coordinate deadlines, team progress, Issues and GitHub Projects |
-| Co-Coordinator | **Sumaiya** | Support coordination, requirement tracking and task updates |
-| QA Lead | **Vijaha** | Coordinate test design, execution, defect reports and quality checks |
-| GitHub / CI Lead | **Aadhil** | Maintain integration, GitHub repository workflow and GitHub Actions |
-| Review Lead | **Sinthu** | Coordinate peer reviews and use of `REVIEW_CHECKLIST.md` |
+Students to view their own booking requests and booking statuses.
 
-All five members are responsible for meaningful development, testing, review, coordination, or integration contributions and for recording evidence in GitHub.
+Staff to log in and manage the equipment catalogue.
 
-## 3. Functional Requirements and Current Scope
+Staff-only actions to be protected using role-based access control.
 
-| Requirement | Description | Issue | Owner | Status / evaluation scope |
-|---|---|---|---|---|
-| FR-00 | Accounts and Login | [#1](https://github.com/aadhil-nisar/lab-equipment-booking-system/issues/1) | Koparnika | Implemented and merged for E2 |
-| FR-01 | Equipment Catalogue | [#2](https://github.com/aadhil-nisar/lab-equipment-booking-system/issues/2) | Sinthu | Implemented and merged for E2 |
-| FR-02 | Booking Requests | [#3](https://github.com/aadhil-nisar/lab-equipment-booking-system/issues/3) | Sumaiya | Implemented and merged for E2 |
-| FR-03 | Booking Validation | [#4](https://github.com/aadhil-nisar/lab-equipment-booking-system/issues/4) | Vijaha | Initial E2 validation/test design in progress; full completion in E3 |
-| FR-04 | Booking Approval and Status | [#5](https://github.com/aadhil-nisar/lab-equipment-booking-system/issues/5) | Aadhil | E3 work; not yet implemented |
+New equipment booking requests are initially marked as Pending.
 
-**Status note:** This README distinguishes functionality already merged into `main` from planned E2/E3 work. The main branch currently includes basic FR-02 validation (valid input format, existing/available equipment, and end time after start time). The full 30-minute minimum, four-hour maximum, past-booking, and overlap checks are tracked through FR-03; do not claim those are all active until the relevant PRs have been merged and verified.
+The project also demonstrates Software Engineering practices, including GitHub Issues, GitHub Projects, branches, Pull Requests, peer reviews, automated testing, code-quality checks and Continuous Integration.
 
-## 4. Technology Stack
+Evaluation Milestones
 
-- **Language:** Python 3.11 or newer
-- **Web framework:** Flask
-- **Database / ORM:** SQLite and Flask-SQLAlchemy
-- **Authentication:** Flask-Login; Werkzeug password hashing
-- **Form security:** Flask-WTF CSRF protection
-- **Testing:** pytest and pytest-cov
-- **Linting:** Ruff
-- **Version control:** Git and GitHub
-- **CI:** GitHub Actions
-- **Project management:** GitHub Issues and GitHub Projects
+Evaluation
 
-Exact dependency constraints are maintained in `requirements.txt`.
+Date
 
-## 5. Project Structure
+Requirements
 
-```text
+E1 — Initial Review
+
+14 October 2026
+
+Project setup, repository, team roles, Flask, SQLite, testing and CI
+
+E2 — Intermediate Review
+
+19 October 2026
+
+FR-00, FR-01, FR-02, initial FR-03 validation progress, automated tests, CI and peer reviews
+
+E3 — Final Review
+
+23 October 2026
+
+Complete FR-03, FR-04 booking approval, further integration and final testing
+
+E2 Completion Summary:
+
+FR-00 Accounts and Login — Implemented and merged.
+
+FR-01 Equipment Catalogue — Implemented and merged.
+
+FR-02 Booking Requests — Implemented and merged.
+
+FR-03 Initial Booking Validation — Implemented and merged for E2.
+
+Automated tests — Implemented.
+
+GitHub Actions CI — Configured and running successfully.
+
+GitHub peer reviews — Completed for the merged E2 Pull Requests.
+
+The remaining overlapping-booking validation and Staff approval functionality are part of E3.
+
+2. Team Members and Module Allocation
+
+Member
+
+GitHub Username
+
+Registration Number
+
+Module
+
+Responsibility
+
+Aadhil
+
+aadhil-nisar
+
+ASP/2023/061
+
+M5
+
+Booking Approval, Integration and CI
+
+Koparnika
+
+koparnikasrikaran2002-gif
+
+ASP/2023/082
+
+M1
+
+Accounts and Authentication (FR-00)
+
+Sinthu
+
+sinthu02
+
+ASP/2023/163
+
+M2
+
+Equipment Catalogue (FR-01)
+
+Sumaiya
+
+fathimasumaiya884-collab
+
+ASB/2023/0085
+
+M3
+
+Booking Requests (FR-02)
+
+Vijaha
+
+HasVij
+
+ASB/2023/087
+
+M4
+
+Booking Validation and Tests (FR-03)
+
+Coordination Roles
+
+Role
+
+Member
+
+Responsibility
+
+Coordinator
+
+Koparnika
+
+Team coordination, deadlines, GitHub Issues and Projects
+
+Co-Coordinator
+
+Sumaiya
+
+Support task tracking, communication and progress monitoring
+
+QA Lead
+
+Vijaha
+
+Test design, BVA/EP, validation and test evidence
+
+GitHub / CI Lead
+
+Aadhil
+
+Integration, GitHub Actions, PR coordination and merges
+
+Review Lead
+
+Sinthu
+
+Coordinate peer reviews and maintain review practices
+
+Each team member contributes through development, testing, peer review, integration or coordination.
+
+3. Functional Requirements and Current Scope
+
+Requirement
+
+Description
+
+Issue
+
+Responsible
+
+E2 Status
+
+FR-00
+
+Accounts and Login
+
+#1
+
+Koparnika
+
+Completed and merged
+
+FR-01
+
+Equipment Catalogue
+
+#2
+
+Sinthu
+
+Completed and merged
+
+FR-02
+
+Booking Requests
+
+#3
+
+Sumaiya
+
+Completed and merged
+
+FR-03
+
+Booking Validation
+
+#4
+
+Vijaha
+
+Initial E2 validation merged; E3 overlap work remaining
+
+FR-04
+
+Booking Approval and Status
+
+#5
+
+Aadhil
+
+Planned for E3
+
+Current Implementation Status
+
+FR-00, FR-01 and FR-02 are implemented and merged into main.
+
+FR-03 initial E2 validation is also merged. It currently includes:
+
+End time must be after start time.
+
+Booking must start in the future.
+
+Minimum booking duration of 30 minutes.
+
+Maximum booking duration of 4 hours.
+
+Rejection of unavailable equipment.
+
+Automated boundary and form-validation tests.
+
+Remaining E3 functionality:
+
+Overlapping-booking detection and final integration.
+
+Staff approval and rejection of booking requests.
+
+Approval-time booking validation.
+
+Additional integration and regression tests.
+
+4. Technology Stack
+
+Technology
+
+Purpose
+
+Python
+
+Programming language
+
+Flask
+
+Web application framework
+
+SQLite
+
+Database
+
+Flask-SQLAlchemy
+
+Database models and queries
+
+Flask-Login
+
+Login sessions and authentication
+
+Werkzeug
+
+Password hashing
+
+Flask-WTF
+
+CSRF protection
+
+HTML and CSS
+
+User interface
+
+pytest
+
+Automated testing
+
+pytest-cov
+
+Test coverage
+
+Ruff
+
+Python code-quality checking
+
+Git
+
+Version control
+
+GitHub
+
+Repository and team collaboration
+
+GitHub Issues
+
+Requirement and task tracking
+
+GitHub Projects
+
+Project workflow board
+
+GitHub Actions
+
+Continuous Integration
+
+Dependencies are maintained in requirements.txt.
+
+5. Project Structure
+
 lab-equipment-booking-system/
-├── .github/
-│   └── workflows/
-│       └── ci.yml
-├── app/
-│   ├── __init__.py               # Flask application factory
-│   ├── commands.py               # Manual Staff creation command
-│   ├── extensions.py             # Database, login and CSRF extensions
-│   ├── models/
-│   │   ├── __init__.py
-│   │   ├── user.py                # Student / Staff accounts
-│   │   ├── equipment.py           # Equipment records
-│   │   └── booking.py             # Student booking requests
-│   ├── routes/
-│   │   ├── __init__.py
-│   │   ├── auth.py                # Register, login, logout, Staff page
-│   │   ├── equipment.py           # Catalogue and Staff CRUD
-│   │   └── booking.py             # Submit and view Student bookings
-│   └── templates/
-│       ├── index.html
-│       ├── auth/
-│       │   ├── register.html
-│       │   ├── login.html
-│       │   └── staff.html
-│       ├── equipment/
-│       │   ├── catalogue.html
-│       │   └── form.html
-│       └── booking/
-│           ├── new.html
-│           └── mine.html
-├── tests/
-│   ├── conftest.py
-│   ├── test_smoke.py
-│   ├── test_auth.py
-│   ├── test_equipment.py
-│   ├── test_booking.py
-│   └── test_e2_integration.py
-├── .gitignore
-├── README.md
-├── REVIEW_CHECKLIST.md
-├── TESTING.md
-└── requirements.txt
-```
+|
+|-- .github/
+|   |-- workflows/
+|       |-- ci.yml
+|
+|-- app/
+|   |-- __init__.py
+|   |-- commands.py
+|   |-- extensions.py
+|   |-- booking_validation.py
+|   |
+|   |-- models/
+|   |   |-- __init__.py
+|   |   |-- user.py
+|   |   |-- equipment.py
+|   |   |-- booking.py
+|   |
+|   |-- routes/
+|   |   |-- __init__.py
+|   |   |-- auth.py
+|   |   |-- equipment.py
+|   |   |-- booking.py
+|   |
+|   |-- templates/
+|       |-- index.html
+|       |-- auth/
+|       |   |-- register.html
+|       |   |-- login.html
+|       |   |-- staff.html
+|       |-- equipment/
+|       |   |-- catalogue.html
+|       |   |-- form.html
+|       |-- booking/
+|           |-- new.html
+|           |-- mine.html
+|
+|-- tests/
+|   |-- conftest.py
+|   |-- test_smoke.py
+|   |-- test_auth.py
+|   |-- test_equipment.py
+|   |-- test_booking.py
+|   |-- test_booking_validation.py
+|   |-- test_e2_integration.py
+|
+|-- .gitignore
+|-- README.md
+|-- REVIEW_CHECKLIST.md
+|-- TESTING.md
+|-- requirements.txt
 
-**FR-03 in-progress files:** Vijaha's E2 work may add `app/booking_validation.py` and `tests/test_booking_validation.py`. Include these in the structure above **only after** that PR is merged into `main`.
+E2 validation module: app/booking_validation.py
 
-## 6. Installation and Local Setup
+E2 validation tests: tests/test_booking_validation.py
 
-Instructions below use **Windows PowerShell** in VS Code.
+The E3 overlap-validation tests are developed separately in the FR-03 feature branch and are not part of the merged E2 implementation.
 
-### Step 1 — Clone the repository
+6. Installation and Local Setup
 
-```powershell
+The following instructions use Windows PowerShell in VS Code.
+
+Step 1 — Clone the Repository
+
 git clone https://github.com/aadhil-nisar/lab-equipment-booking-system.git
 cd lab-equipment-booking-system
-```
 
-If the project is already cloned, enter the folder and update `main` instead:
+If the repository is already cloned, check your local work before updating:
 
-```powershell
+git status --short
+git branch --show-current
+
+Once unfinished changes are safely committed or saved, update main:
+
 git switch main
 git pull --ff-only origin main
-```
 
-Before switching branches, check `git status --short` and resolve any local changes. Do not discard teammates' work.
+Step 2 — Create a Virtual Environment
 
-### Step 2 — Create and activate a virtual environment
-
-```powershell
 py -m venv .venv
+
+Activate it:
+
 .\.venv\Scripts\Activate.ps1
-```
 
-If `.venv` already exists, only activate it.
+Step 3 — Install Dependencies
 
-### Step 3 — Install dependencies
-
-```powershell
 python -m pip install -r requirements.txt
-```
 
-### Step 4 — Set a local Flask secret key
+Step 4 — Set a Local Secret Key
 
-Set a fresh secret in the current PowerShell session:
-
-```powershell
 $env:SECRET_KEY = (python -c "import secrets; print(secrets.token_hex(32))")
-```
 
-Use the same environment variable value across server restarts if you want existing login sessions to remain valid. Never commit secret values or passwords to GitHub. The application generates a key if none is provided, but keeping a stable local key is more convenient for development.
+Never commit secret keys or passwords to GitHub.
 
-### Step 5 — Start the application
+Step 5 — Run the Application
 
-```powershell
+python -m flask --app app run --port 5001
+
+Open:
+
+http://127.0.0.1:5001
+
+For development on the default port:
+
 python -m flask --app app run --debug
-```
 
-Open: http://127.0.0.1:5000/
+Default URL:
 
-If port 5000 is already in use:
+http://127.0.0.1:5000
 
-```powershell
-python -m flask --app app run --debug --port 5001
-```
+Step 6 — Check Application Routes
 
-Then use `http://127.0.0.1:5001/` and replace port 5000 with 5001 in the URLs below. `--debug` is for local development only.
+In a second terminal:
 
-### Step 6 — Verify registered routes
-
-In a second terminal with the environment activated:
-
-```powershell
 python -m flask --app app routes
-```
 
-## 7. Database Setup and Models
+Expected routes include:
 
-The application uses SQLite through Flask-SQLAlchemy and initializes registered tables when Flask starts using `db.create_all()`.
+/auth/register
 
-The local database is normally stored at:
+/auth/login
 
-```text
+/auth/logout
+
+/auth/staff
+
+/equipment/
+
+/equipment/new
+
+/bookings/new
+
+/bookings/
+
+7. Database Setup and Models
+
+The application uses SQLite and Flask-SQLAlchemy.
+
+The application factory initializes the database tables using db.create_all().
+
+Local database path:
+
 instance/lab_equipment.db
-```
 
-The `instance/` folder and SQLite database files are excluded from Git. **Do not delete the database casually**: it contains local accounts, equipment and bookings. `create_all()` creates missing tables; it does **not** migrate existing table schemas.
+The database file is excluded from version control.
 
-### User model — FR-00
+Important: Do not delete the local database during the demonstration because it contains accounts, equipment and booking records.
 
-| Field | Purpose |
-|---|---|
-| `id` | Unique account identifier |
-| `username` | Unique username |
-| `email` | Unique email address |
-| `password_hash` | Hashed password, never plaintext |
-| `role` | `Student` or `Staff` |
+User Model — FR-00
 
-### Equipment model — FR-01
+File: app/models/user.py
 
-| Field | Purpose |
-|---|---|
-| `id` | Unique equipment identifier |
-| `name` | Required name, up to 120 characters |
-| `category` | Required category, up to 80 characters |
-| `description` | Description; form limits input to 2,000 characters |
-| `status` | `Available` or `Out of service` |
+Field
 
-### Booking model — FR-02
+Description
 
-| Field | Purpose |
-|---|---|
-| `id` | Unique booking identifier |
-| `student_id` | Foreign key to the requesting User |
-| `equipment_id` | Foreign key to Equipment |
-| `booking_date` | Requested date |
-| `start_time` | Requested start time |
-| `end_time` | Requested end time |
-| `status` | `Pending`, `Approved` or `Rejected` |
+id
 
-New requests are always created as **Pending**. The model can store Approved and Rejected values for future FR-04 functionality, but Staff approval/rejection routes are not yet implemented.
+Unique user identifier
 
-**Integration limitation:** FR-01 currently permits Staff to delete equipment. Because FR-02 bookings reference Equipment rows, the team must add an agreed protection/deactivation rule before deleting equipment linked to bookings. Avoid deleting referenced equipment during demonstrations.
+username
 
-## 8. FR-00 — Accounts and Authentication
+Unique login username
 
-**Owner:** Koparnika (`koparnikasrikaran2002-gif`)
-**Issue:** [#1](https://github.com/aadhil-nisar/lab-equipment-booking-system/issues/1)
+email
 
-Implemented functionality:
+Email address
 
-- Public Student registration (public registration cannot assign the Staff role).
-- Login and logout using Flask-Login sessions.
-- Secure password hashing with Werkzeug.
-- Student and Staff roles.
-- Staff-only access enforcement; unauthorized Students receive HTTP 403.
-- CSRF-protected registration, login and logout forms.
+password_hash
 
-### Account URLs
+Secure password hash
 
-| Page | Route |
-|---|---|
-| Student registration | `/auth/register` |
-| Login | `/auth/login` |
-| Logout | `/auth/logout` (POST) |
-| Staff dashboard | `/auth/staff` |
+role
 
-### Create a Staff account manually
+Student or Staff
 
-Staff accounts **must not** be created through public registration. Run:
+Equipment Model — FR-01
 
-```powershell
+File: app/models/equipment.py
+
+Field
+
+Description
+
+id
+
+Unique equipment identifier
+
+name
+
+Equipment name
+
+category
+
+Equipment category
+
+description
+
+Equipment details
+
+status
+
+Available or Out of service
+
+Booking Model — FR-02
+
+File: app/models/booking.py
+
+Field
+
+Description
+
+id
+
+Unique booking identifier
+
+student_id
+
+Student who submitted the booking
+
+equipment_id
+
+Requested equipment
+
+booking_date
+
+Requested date
+
+start_time
+
+Booking start time
+
+end_time
+
+Booking end time
+
+status
+
+Pending, Approved or Rejected
+
+New bookings are saved with Pending status.
+
+Approved and Rejected are supported by the data model, but Staff approval and rejection actions are reserved for FR-04.
+
+8. FR-00 — Accounts and Authentication
+
+Developer: Koparnika
+Reviewer: Sumaiya
+Issue: #1
+Merged PR: #11
+
+Implemented Features
+
+Student registration.
+
+Username and password authentication.
+
+Secure password hashing.
+
+Login and logout functionality.
+
+Student and Staff roles.
+
+Staff-only dashboard.
+
+Role-based access control.
+
+CSRF-protected forms.
+
+Application URLs
+
+Feature
+
+Route
+
+Register
+
+/auth/register
+
+Login
+
+/auth/login
+
+Logout
+
+/auth/logout
+
+Staff Dashboard
+
+/auth/staff
+
+Create a Staff Account
+
+Staff accounts are created using the Flask CLI:
+
 python -m flask --app app create-staff
-```
 
-Enter the username, email and password when prompted. Choose a unique username/email and a password of at least eight characters. Do not publish the password or store it in README, Issues, PR comments or screenshots.
+Follow the terminal prompts.
 
-Run FR-00 tests:
+Public Student registration cannot create Staff accounts.
 
-```powershell
+Role Restriction
+
+A logged-in Student opening:
+
+http://127.0.0.1:5001/auth/staff
+
+receives:
+
+403 Forbidden
+
+Automated Tests
+
 python -m pytest tests/test_auth.py -v
-```
 
-## 9. FR-01 — Equipment Catalogue
+E2 Status: Completed and merged.
 
-**Owner:** Sinthu (`sinthu02`)
-**Issue:** [#2](https://github.com/aadhil-nisar/lab-equipment-booking-system/issues/2)
+9. FR-01 — Equipment Catalogue
 
-Implemented functionality:
+Developer: Sinthu
+Reviewer: Vijaha
+Issue: #2
+Merged PR: #12
 
-- Authenticated Students and Staff can browse equipment.
-- Category filtering.
-- Staff-only equipment creation, editing and deletion.
-- Name/category/description validation.
-- Equipment status: Available or Out of service.
-- Server-side authorization checks, not just hidden buttons.
+Implemented Features
 
-### Equipment routes
+Display laboratory equipment.
 
-| Feature | Route | Allowed user |
-|---|---|---|
-| View/filter equipment | `/equipment/` | Logged-in Student or Staff |
-| Add equipment | `/equipment/new` | Staff |
-| Edit equipment | `/equipment/<id>/edit` | Staff |
-| Delete equipment | `/equipment/<id>/delete` (POST) | Staff |
+Filter equipment by category.
 
-A Student trying a Staff-only URL receives HTTP 403. A user who is not logged in is redirected to login.
+Display availability status.
 
-Run FR-01 tests:
+Staff adds equipment.
 
-```powershell
+Staff edits equipment.
+
+Staff deletes equipment.
+
+Students have read-only catalogue access.
+
+Unauthorized equipment-management requests are rejected.
+
+Application Routes
+
+Feature
+
+Route
+
+Permission
+
+Equipment Catalogue
+
+/equipment/
+
+Student and Staff
+
+Add Equipment
+
+/equipment/new
+
+Staff
+
+Edit Equipment
+
+/equipment/<id>/edit
+
+Staff
+
+Delete Equipment
+
+/equipment/<id>/delete
+
+Staff, POST only
+
+Student Access Restriction
+
+A Student opening:
+
+http://127.0.0.1:5001/equipment/new
+
+receives:
+
+403 Forbidden
+
+Automated Tests
+
 python -m pytest tests/test_equipment.py -v
-```
 
-## 10. FR-02 — Booking Requests
+E2 Status: Completed and merged.
 
-**Owner:** Sumaiya (`fathimasumaiya884-collab`)
-**Issue:** [#3](https://github.com/aadhil-nisar/lab-equipment-booking-system/issues/3)
+Integration note: Avoid deleting equipment that already has associated booking records. Protection for historical booking references requires further integration review.
 
-Implemented functionality:
+10. FR-02 — Booking Requests
 
-- Logged-in Students choose available equipment.
-- Students enter a booking date, start time and end time.
-- Booking records are linked to the logged-in Student and the selected Equipment.
-- Every new booking is saved with Pending status.
-- Students can view **only their own** booking requests.
-- Anonymous users are redirected to login; Staff cannot use Student booking routes.
-- Basic form checks reject invalid date/time input, missing equipment, equipment marked Out of service, and end times not after start times.
+Developer: Sumaiya
+Reviewer: Sinthu
+Issue: #3
+Merged PR: #14
 
-### Booking routes
+Implemented Features
 
-| Feature | Route | Allowed user |
-|---|---|---|
-| New booking request | `/bookings/new` | Student |
-| My booking requests | `/bookings/` | Student |
+Student booking request form.
 
-### Example Student workflow
+Selection of available equipment.
 
-1. Register or log in at `/auth/login`.
-2. Open `/equipment/` to view the catalogue.
-3. Select **Request Equipment** on the homepage, or go to `/bookings/new`.
-4. Choose an Available item and enter the date, start and end times.
-5. Submit the request.
-6. View it at `/bookings/` with **Pending** status.
+Booking date selection.
 
-Run FR-02 tests:
+Start-time and end-time selection.
 
-```powershell
+Booking storage in SQLite.
+
+Automatic Pending status.
+
+Student booking history.
+
+Students can view only their own bookings.
+
+Staff cannot submit Student booking requests.
+
+Booking Routes
+
+Feature
+
+Route
+
+Submit Booking
+
+/bookings/new
+
+My Booking Requests
+
+/bookings/
+
+Student Booking Workflow
+
+Log in using a Student account.
+
+Open Equipment Catalogue.
+
+Click Request Equipment.
+
+Select Available equipment.
+
+Choose a future booking date.
+
+Enter start and end times.
+
+Submit Booking Request.
+
+Open My Booking Requests.
+
+Confirm the new booking status is Pending.
+
+Automated Tests
+
 python -m pytest tests/test_booking.py -v
-```
 
-## 11. FR-03 — Booking Validation: E2 Progress and E3 Completion
+E2 Status: Completed and merged.
 
-**Owner:** Vijaha (`HasVij`)
-**Issue:** [#4](https://github.com/aadhil-nisar/lab-equipment-booking-system/issues/4)
+11. FR-03 — Booking Validation
 
-FR-02 already checks time ordering and Equipment service status. The remaining FR-03 validation work is tracked separately, and Issue #4 remains open until the complete requirement is implemented and tested.
+Developer: Vijaha
+Reviewer: Sumaiya
+Issue: #4
+E2 Merged PR: #15
 
-### E2 targets
+E2 Implementation Status
 
-- Prepare a test design using **Boundary Value Analysis (BVA)** and **Equivalence Partitioning (EP)**.
-- Implement and test selected time validations, including the proposed 30-minute minimum, four-hour maximum and past-booking checks.
-- Record positive/negative tests and evidence in `TESTING.md`.
-- Demonstrate work in progress with a feature branch, PR and CI evidence.
+The initial FR-03 validation implementation is completed and merged into main.
 
-### Duration boundaries for test design
+Files added:
 
-| Case | Duration | Expected when FR-03 rules are active |
-|---|---|---|
-| BVA-01 | 29 minutes | Reject |
-| BVA-02 | 30 minutes | Accept |
-| BVA-03 | 31 minutes | Accept |
-| BVA-04 | 239 minutes | Accept |
-| BVA-05 | 240 minutes | Accept |
-| BVA-06 | 241 minutes | Reject |
+app/booking_validation.py
+tests/test_booking_validation.py
 
-### Remaining E3 scope
+Implemented Validation Rules
 
-- Prevent booking time slots in the past.
-- Enforce both duration boundaries throughout the application.
-- Detect overlapping requests according to agreed status/conflict rules.
-- Integrate validation with Staff decisions.
-- Add comprehensive boundary, equivalence, negative and integration tests.
+Booking must start in the future.
 
-**Important:** Do not mark Issue #4 Done just because the initial E2 validation PR is merged. Keep it open and **In progress** for E3 work. The E2 PR should say `Part of #4`, **not** `Closes #4`.
+End time must be after start time.
 
-The planned tests may run with the following command **after** the files have been added to the relevant branch:
+Minimum booking duration is 30 minutes.
 
-```powershell
+Maximum booking duration is 4 hours.
+
+Equipment must exist and be available.
+
+Invalid requests must not create booking records.
+
+The minimum and maximum duration boundaries are inclusive.
+
+Boundary Value Analysis (BVA)
+
+Boundary Value Analysis tests values below, at and above a defined limit.
+
+Test ID
+
+Start Time
+
+End Time
+
+Duration
+
+Expected
+
+BVA-01
+
+09:00
+
+09:29
+
+29 minutes
+
+Reject
+
+BVA-02
+
+09:00
+
+09:30
+
+30 minutes
+
+Accept
+
+BVA-03
+
+09:00
+
+09:31
+
+31 minutes
+
+Accept
+
+BVA-04
+
+09:00
+
+12:59
+
+239 minutes
+
+Accept
+
+BVA-05
+
+09:00
+
+13:00
+
+240 minutes
+
+Accept
+
+BVA-06
+
+09:00
+
+13:01
+
+241 minutes
+
+Reject
+
+These tests use a future booking date.
+
+Equivalence Partitioning (EP)
+
+Equivalence Partitioning divides inputs into categories with similar expected behavior.
+
+Test ID
+
+Input Category
+
+Expected
+
+EP-01
+
+Valid future booking
+
+Accept
+
+EP-02
+
+Booking shorter than 30 minutes
+
+Reject
+
+EP-03
+
+Booking longer than 4 hours
+
+Reject
+
+EP-04
+
+End time before start time
+
+Reject
+
+EP-05
+
+Past booking date
+
+Reject
+
+EP-06
+
+Out-of-service equipment
+
+Reject
+
+EP-07
+
+Unknown equipment
+
+Reject
+
+Automated Validation Tests
+
+Run:
+
 python -m pytest tests/test_booking_validation.py -v
-```
 
-## 12. FR-04 — Booking Approval and Status: E3
+Test coverage includes:
 
-**Owner:** Aadhil (`aadhil-nisar`)
-**Issue:** [#5](https://github.com/aadhil-nisar/lab-equipment-booking-system/issues/5)
+Duration boundary checks.
 
-Planned functionality:
+Future-date validation.
 
-- Staff view Pending booking requests.
-- Staff approve or reject requests.
-- Status changes are saved as Approved or Rejected.
-- Students can view their resulting status.
-- Approval actions are restricted to Staff.
-- Booking-conflict checks are integrated with approval.
-- Automated tests cover authorization and status changes.
+Invalid time ordering.
 
-**Status:** Planned for E3; not yet available on `main`.
+Validation through the Flask booking form.
 
-## 13. Automated Testing and Coverage
+Confirmation that valid bookings receive Pending status.
 
-Tests use pytest with fixtures defined in `tests/conftest.py`. The configured test database uses **SQLite in memory** and disables CSRF **only for automated Flask test-client requests**. CSRF remains enabled for normal browser requests.
+Confirmation that rejected requests are not saved.
 
-### Run individual test suites
+GitHub Evidence
 
-```powershell
+Merged FR-03 E2 PR:
+
+https://github.com/aadhil-nisar/lab-equipment-booking-system/pull/15
+
+Developer: Vijaha
+Reviewer: Sumaiya
+
+Remaining E3 Work
+
+Complete overlapping-booking detection.
+
+Verify partial and exact time overlaps.
+
+Verify adjacent bookings.
+
+Integrate final validation with Staff approval decisions.
+
+Complete remaining tests and integration.
+
+The overlapping-booking feature is being developed through:
+
+Open E3 PR #16:
+https://github.com/aadhil-nisar/lab-equipment-booking-system/pull/16
+
+PR #16 is not yet merged into main.
+
+Issue #4 must remain Open / In progress until the full FR-03 requirement is completed.
+
+E2 Status: Initial FR-03 validation completed and merged.
+
+12. FR-04 — Booking Approval and Status
+
+Developer: Aadhil
+Issue: #5
+
+Target: E3 — Final Evaluation
+
+Planned Features
+
+Staff view Pending booking requests.
+
+Staff approve or reject requests.
+
+Booking status changes are saved in SQLite.
+
+Students can view the updated booking status.
+
+Students cannot approve or reject bookings.
+
+Booking conflicts are checked before approval.
+
+Automated tests verify approval, rejection and access control.
+
+Booking Status Values
+
+Status
+
+Meaning
+
+Pending
+
+Waiting for Staff decision
+
+Approved
+
+Accepted by Staff
+
+Rejected
+
+Declined by Staff
+
+Current Status: Planned for E3; Staff approval and rejection have not yet been implemented on the merged E2 branch.
+
+13. Automated Testing and Coverage
+
+The project uses pytest for automated tests.
+
+Tests use an isolated SQLite in-memory database through tests/conftest.py.
+
+CSRF protection is disabled only for automated test-client requests. Normal browser forms retain CSRF protection.
+
+FR-00 — Authentication Tests
+
+python -m pytest tests/test_auth.py -v
+
+FR-01 — Equipment Tests
+
+python -m pytest tests/test_equipment.py -v
+
+FR-02 — Booking Tests
+
+python -m pytest tests/test_booking.py -v
+
+FR-03 — Validation Tests
+
+python -m pytest tests/test_booking_validation.py -v
+
+E2 Integration Tests
+
+python -m pytest tests/test_e2_integration.py -v
+
+Smoke Tests
+
 python -m pytest tests/test_smoke.py -v
+
+Run All Automated Tests
+
+python -m pytest -v
+
+Run Ruff
+
+python -m ruff check .
+
+Generate Test Coverage
+
+python -m pytest --cov=app --cov-report=term-missing
+
+Coverage identifies which portions of application code are executed during automated tests.
+
+The actual test count and coverage percentage should be recorded in TESTING.md after running the commands.
+
+Combined Testing Commands
+
 python -m pytest tests/test_auth.py -v
 python -m pytest tests/test_equipment.py -v
 python -m pytest tests/test_booking.py -v
+python -m pytest tests/test_booking_validation.py -v
 python -m pytest tests/test_e2_integration.py -v
-```
-
-### Run all tests
-
-```powershell
 python -m pytest -v
-```
-
-### Generate a coverage report
-
-```powershell
-python -m pytest --cov=app --cov-report=term-missing
-```
-
-### Check Python code quality
-
-```powershell
 python -m ruff check .
-```
+python -m pytest --cov=app --cov-report=term-missing
 
-Use `TESTING.md` to record **actual** test results, boundary/equivalence cases, manual test evidence, coverage percentage, failed tests and defect resolutions. Do not invent a pass count or coverage figure.
+14. Continuous Integration — GitHub Actions
 
-## 14. Continuous Integration (GitHub Actions)
+The repository uses GitHub Actions for Continuous Integration.
 
-Workflow: [`.github/workflows/ci.yml`](.github/workflows/ci.yml)
+Workflow file:
 
-GitHub Actions runs for pushes and pull requests. The existing workflow:
+.github/workflows/ci.yml
 
-1. Checks out the repository.
-2. Sets up Python 3.11.
-3. Installs dependencies from `requirements.txt`.
-4. Runs `python -m ruff check .`.
-5. Runs `python -m pytest --cov=app --cov-report=term-missing`.
+CI Pipeline
 
-PRs must have green checks on the latest commit before being merged. If CI fails, open the failed job logs, fix the cause on the feature branch, push again and wait for the rerun.
+When code is pushed or a Pull Request is opened, GitHub Actions runs the configured workflow.
 
-## 15. GitHub Issues, Branches, PRs and Peer Reviews
+The workflow:
 
-### Standard contribution workflow
+Checks out the repository.
 
-1. Open the assigned Issue and confirm acceptance criteria.
-2. Update the Issue's GitHub Project status to **In progress**.
-3. Pull the latest `main` and create a feature branch.
-4. Implement the change and write automated tests.
-5. Run pytest, Ruff and coverage locally.
-6. Update relevant documentation and `TESTING.md`.
-7. Review `git status --short` and staged diff before committing.
-8. Push to GitHub and open a PR targeting `main`.
-9. Link the Issue and request a **different** team member as reviewer.
-10. Reviewer checks **Files changed**, leaves a **written PR review note**, and Approves or Requests changes according to `REVIEW_CHECKLIST.md`.
-11. Resolve review feedback and confirm latest CI is green.
-12. Aadhil coordinates merge/integration; update the Project board and Issue state.
+Sets up Python 3.11.
 
-### Example Git commands
+Installs dependencies.
 
-```powershell
-git status --short
-git switch main
-git pull --ff-only origin main
-git switch -c feature/FR-XX-description
-# Make changes and run tests
-git status --short
-git add <specific-file-paths>
-git --no-pager diff --cached --stat
-git diff --cached --check
-git commit -m "Implement FR-XX feature and tests"
-git push -u origin feature/FR-XX-description
-```
+Runs Ruff.
 
-Replace the example branch and file placeholders; do not paste `<specific-file-paths>` literally into PowerShell. Avoid committing `.venv/`, `instance/`, `*.db`, `.env`, passwords or local test/coverage caches.
+Runs pytest with coverage.
 
-### Module PR review assignments
+Displays the job result.
 
-| Work | Developer | Reviewer | Integration |
-|---|---|---|---|
-| E1 Flask/database/tests/CI | Aadhil | Sinthu | Aadhil |
-| E1 README/review checklist | Koparnika | Vijaha | Aadhil |
-| FR-00 | Koparnika | Sumaiya | Aadhil |
-| FR-01 | Sinthu | Vijaha | Aadhil |
-| FR-02 | Sumaiya | Sinthu | Aadhil |
-| FR-03 E2 initial validation | Vijaha | Sumaiya | Aadhil |
-| FR-04 E3 | Aadhil | Another non-author team member | Team |
+CI Commands
 
-Every reviewer should leave a dated summary in the GitHub PR review with the checked functionality, test/CI evidence, issues found and decision. The **PR conversation is the review record**; do not overwrite README or the review checklist for each individual review.
+python -m ruff check .
+python -m pytest --cov=app --cov-report=term-missing
 
-For completed functional requirements, the PR description can include `Closes #N` so GitHub closes the Issue when merged. For **partial FR-03 E2 progress**, link `Part of #4` instead so the Issue stays open.
+GitHub Actions Evidence
 
-### GitHub Projects board
+Actions page:
 
-The board uses:
+https://github.com/aadhil-nisar/lab-equipment-booking-system/actions
 
-`Backlog → To do → In progress → In review → Done`
+Verified successful main workflow:
 
-- **In progress:** Member is implementing or fixing the task.
-- **In review:** A PR is open and awaiting review/CI.
-- **Done:** Work is approved, checks pass and the PR is merged.
-- **FR-03 exception:** After partial E2 work is merged, return Issue #4 to **In progress** until E3 completion.
+https://github.com/aadhil-nisar/lab-equipment-booking-system/actions/runs/39183895215
 
-**Coordination:** Koparnika maintains the board with Sumaiya's co-coordinator support.
+This verifies that the configured CI workflow completed successfully on that main revision.
 
-## 16. E2 Evaluation Demonstration Plan (Approximately 15 Minutes)
+Any newer commits or Pull Requests should be checked separately for their latest CI results.
 
-| Approx. time | Presenter | Demonstration |
-|---|---|---|
-| 1 min | Koparnika | Project overview, Issues, team roles and board |
-| 3 min | Koparnika | FR-00 Student registration/login/logout and Staff restriction |
-| 3 min | Sinthu | FR-01 catalogue, filter and Staff add/edit controls |
-| 3 min | Sumaiya | FR-02 Student request, Pending status and own-bookings view |
-| 2 min | Vijaha | FR-03 initial validation design, boundary tests and progress |
-| 2 min | Aadhil | pytest, Ruff, coverage, GitHub Actions and reviewed PR evidence |
-| 1 min | Team | Integration summary, limitations and E3 plan |
+15. GitHub Issues, Branches, Pull Requests and Peer Reviews
 
-Prepare test accounts and sample equipment **locally** in advance; do not share passwords. Use a separate test account for Student and Staff. If FR-03 validation code is still under review, distinguish its feature-branch demonstration from merged `main` functionality.
+Development Workflow
 
-### Evidence to have ready
+The team follows this development process:
 
-- Functional demo of FR-00, FR-01 and FR-02.
-- GitHub Issues and Project board status.
-- Feature branches, PRs and **written reviewer notes**.
-- GitHub Actions results for the latest merged changes.
-- pytest/Ruff/coverage output.
-- `TESTING.md` with BVA/EP plan and actual results.
-- Clear explanation of E3 remaining work.
+Issue → Branch → Code → Tests → Pull Request → Peer Review → CI → Merge → Project Board Update
 
-## 17. Security, Data Integrity and Development Notes
+Development Steps
 
-- Never commit passwords, secret keys or real user credentials.
-- Store passwords as hashes, not plaintext.
-- Enforce Student/Staff restrictions on the **server**, not only by hiding links.
-- Keep CSRF enabled for browser forms; tests use an isolated test configuration.
-- Confirm booking ownership using the logged-in session, not editable form input.
-- Validate incoming equipment, dates, times and status values server-side.
-- Protect bookings when changing/deleting referenced equipment during future integration.
-- Do not use the Flask debug server for production deployment.
-- Perform code review and resolve CI errors before merging.
+Create or open the assigned GitHub Issue.
 
-## 18. Current Project Status
+Read its description, tasks and acceptance criteria.
 
-**E1:** Completed — Flask and SQLite foundation, tests, CI, documentation and GitHub workflow established.
+Assign the responsible team member.
 
-**E2:** FR-00, FR-01 and FR-02 have been implemented and merged. Initial FR-03 validation development/testing and final intermediate-review preparation are in progress.
+Move the Issue to In progress.
 
-**E3:** Finish FR-03 overlap/conflict validation, implement FR-04 approval/rejection, close remaining integration gaps, and complete final testing and documentation.
+Create a separate feature branch.
 
-For up-to-date progress, use the [repository](https://github.com/aadhil-nisar/lab-equipment-booking-system), [Issues](https://github.com/aadhil-nisar/lab-equipment-booking-system/issues), [Pull Requests](https://github.com/aadhil-nisar/lab-equipment-booking-system/pulls), and `TESTING.md` rather than relying on this snapshot alone.
+Implement the required functionality.
+
+Add automated tests.
+
+Run pytest and Ruff.
+
+Push the branch to GitHub.
+
+Create a Pull Request targeting main.
+
+Assign a different team member as reviewer.
+
+Reviewer checks the changes and leaves written feedback.
+
+Confirm GitHub Actions CI passes.
+
+Merge the approved Pull Request.
+
+Update the Issue and Project Board.
+
+E2 Pull Requests and Reviews
+
+Work
+
+Developer
+
+Reviewer
+
+Pull Request
+
+Status
+
+FR-00
+
+Koparnika
+
+Sumaiya
+
+#11
+
+Merged
+
+FR-01
+
+Sinthu
+
+Vijaha
+
+#12
+
+Merged
+
+FR-02
+
+Sumaiya
+
+Sinthu
+
+#14
+
+Merged
+
+FR-03 E2
+
+Vijaha
+
+Sumaiya
+
+#15
+
+Merged
+
+E2 Integration
+
+Aadhil
+
+Vijaha
+
+#13
+
+Merged
+
+E3 Development
+
+Work
+
+Responsible
+
+Pull Request
+
+Status
+
+FR-03 Overlap Validation
+
+Vijaha
+
+#16
+
+Open, not merged
+
+FR-04 Staff Approval
+
+Aadhil
+
+Not yet recorded
+
+Planned
+
+Peer Review Requirements
+
+Before approving a PR, the reviewer should check:
+
+Correct functionality.
+
+Code quality.
+
+Authentication and authorization.
+
+Database behavior.
+
+Error handling.
+
+Automated tests.
+
+Integration with existing modules.
+
+Successful CI results.
+
+Reviewers should leave a written review note and approve or request changes.
+
+The review guidelines are documented in:
+
+REVIEW_CHECKLIST.md
+
+GitHub Projects Board
+
+The team uses the following workflow:
+
+Backlog → To do → In progress → In review → Done
+
+Backlog: Work planned for a future evaluation.
+
+To do: Work ready to begin.
+
+In progress: Development is underway.
+
+In review: Pull Request is awaiting review.
+
+Done: Work completed, reviewed and integrated.
+
+The coordinator is Koparnika, supported by Sumaiya.
+
+FR-03 Issue #4 remains In progress because its final E3 work is not complete.
+
+16. E2 Evaluation Demonstration Plan
+
+Evaluation Date: 19 October 2026
+Duration: Approximately 15 minutes
+
+Time
+
+Responsible
+
+Demonstration
+
+1 minute
+
+Koparnika
+
+Project introduction, team roles and requirements
+
+3 minutes
+
+Koparnika
+
+FR-00 Accounts and Login
+
+3 minutes
+
+Sinthu
+
+FR-01 Equipment Catalogue
+
+3 minutes
+
+Sumaiya
+
+FR-02 Booking Requests
+
+2 minutes
+
+Vijaha
+
+FR-03 validation progress, BVA and EP tests
+
+2 minutes
+
+Aadhil
+
+Automated tests, coverage, Ruff and GitHub Actions
+
+1 minute
+
+Team
+
+GitHub collaboration and remaining E3 work
+
+FR-00 Demonstration
+
+Register Student.
+
+Login.
+
+Show Student role.
+
+Show 403 on Staff-only URL.
+
+Login as Staff.
+
+Show Staff Dashboard.
+
+Logout.
+
+FR-01 Demonstration
+
+Login as Staff.
+
+Open Equipment Catalogue.
+
+Add equipment.
+
+Edit equipment.
+
+Change availability status.
+
+Filter equipment by category.
+
+Demonstrate Student read-only permissions.
+
+FR-02 Demonstration
+
+Login as Student.
+
+Open Request Equipment.
+
+Select Available equipment.
+
+Select a future date and valid time.
+
+Submit booking.
+
+Show Pending status.
+
+Open My Booking Requests.
+
+FR-03 Demonstration
+
+Reject end time before start time.
+
+Reject 29-minute duration.
+
+Accept 30-minute duration.
+
+Accept 4-hour duration.
+
+Reject 4-hour-1-minute duration.
+
+Reject past bookings.
+
+Show BVA and EP design in TESTING.md.
+
+Show automated tests.
+
+Automated Testing and CI
+
+python -m pytest -v
+python -m ruff check .
+python -m pytest --cov=app --cov-report=term-missing
+
+Show successful GitHub Actions results and reviewed PRs.
+
+Evidence Required
+
+Running Flask application.
+
+Completed FR-00, FR-01 and FR-02 functionality.
+
+Initial FR-03 validation.
+
+Automated tests.
+
+Test coverage report.
+
+Ruff result.
+
+GitHub Actions success.
+
+GitHub Issues.
+
+GitHub Project Board.
+
+Merged Pull Requests.
+
+Peer reviews.
+
+README.md.
+
+TESTING.md.
+
+REVIEW_CHECKLIST.md.
+
+17. Security, Data Integrity and Development Notes
+
+The project includes the following development and security practices:
+
+User passwords are stored using secure hashing.
+
+Authentication uses Flask-Login.
+
+Staff-only routes are restricted.
+
+Student ownership is checked on booking requests.
+
+CSRF protection is enabled for browser forms.
+
+Invalid booking times are rejected.
+
+Equipment availability is validated.
+
+Booking records are linked to database users and equipment.
+
+Automated tests use a separate in-memory database.
+
+Secret keys and passwords must not be committed.
+
+Pull Requests undergo peer review.
+
+GitHub Actions checks code quality and automated tests.
+
+Current Limitations
+
+Full overlapping-booking detection is still being developed in E3.
+
+Staff approval and rejection are not yet available in the merged E2 application.
+
+Deleting equipment with booking history requires additional safeguards.
+
+Booking times use the server's local time; a production system should define an explicit timezone policy.
+
+The Flask development server is not intended for production deployment.
+
+These limitations are recorded as future integration work rather than being presented as completed E2 functionality.
+
+18. Current Project Status
+
+E1 — Completed
+
+The team completed:
+
+GitHub repository setup.
+
+Team roles and task allocation.
+
+Flask application setup.
+
+SQLite database models.
+
+GitHub Issues and Projects.
+
+Testing configuration.
+
+Ruff configuration.
+
+GitHub Actions CI.
+
+README and review documentation.
+
+Initial peer-review workflow.
+
+E2 — Completed Development Scope
+
+The team completed and merged:
+
+FR-00 Accounts and Login — PR #11.
+
+FR-01 Equipment Catalogue — PR #12.
+
+FR-02 Booking Requests — PR #14.
+
+Initial FR-03 Booking Validation — PR #15.
+
+E2 Integration Tests — PR #13.
+
+The application supports Student and Staff authentication, equipment management, Student booking requests, initial booking validation and automated testing.
+
+GitHub Actions has successfully executed the configured CI checks on main.
+
+E3 — Remaining Development
+
+The team will continue with:
+
+Final FR-03 overlapping-booking validation.
+
+FR-04 Staff approval and rejection.
+
+Approval-time validation.
+
+Additional integration and regression tests.
+
+Final documentation and review.
+
+FR-03 E3 development PR: #16 — Open.
+
+FR-04 Issue: #5 — Open.
+
+Project Links
+
+GitHub Repository:
+https://github.com/aadhil-nisar/lab-equipment-booking-system
+
+GitHub Issues:
+https://github.com/aadhil-nisar/lab-equipment-booking-system/issues
+
+Pull Requests:
+https://github.com/aadhil-nisar/lab-equipment-booking-system/pulls
+
+GitHub Actions:
+https://github.com/aadhil-nisar/lab-equipment-booking-system/actions
+
+Testing Documentation:
+TESTING.md
+
+Review Guidelines:
+REVIEW_CHECKLIST.md
+
+Project: Lab Equipment Booking System
+Coursework: Software Engineering Mini Project
+Team Members: Aadhil, Koparnika, Sinthu, Sumaiya and Vijaha
+E2 Review: 19 October 2026
+E3 Review: 23 October 2026
