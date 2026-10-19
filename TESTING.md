@@ -301,3 +301,58 @@ For each PR, the reviewer should:
 **QA Lead:** Vijaha
 **Integration Lead:** Aadhil
 **Sign-off date and verified results:** To be completed after the final E2 checks.
+
+## E2 Final Integration Verification
+
+**Evaluation:** 19 October 2026
+
+**Integration Lead:** Aadhil (`aadhil-nisar`)
+
+**QA Lead:** Vijaha (`HasVij`)
+
+### Integrated Modules
+
+- FR-00 Accounts and Login — merged through PR #11.
+- FR-01 Equipment Catalogue — merged through PR #12.
+- E2 Integration Tests — merged through PR #13.
+- FR-02 Booking Requests — merged through PR #14.
+- FR-03 Initial Booking Validation — merged through PR #15.
+
+### Final Testing Results
+
+| Check | Actual Result |
+|---|---|
+| Flask routes | [Enter result] |
+| FR-00 authentication | [Enter result] |
+| FR-01 equipment catalogue | [Enter result] |
+| FR-02 booking requests | [Enter result] |
+| FR-03 initial validation | [Enter result] |
+| Complete pytest suite | [Enter passed/failed counts] |
+| Ruff | [Enter result] |
+| Coverage | [Enter percentage] |
+| Manual end-to-end demonstration | [Enter result] |
+
+### GitHub Actions Evidence
+
+Main branch CI:
+
+https://github.com/aadhil-nisar/lab-equipment-booking-system/actions/runs/39158047781
+
+Result when checked: Success.
+
+### Peer Review Evidence
+
+- PR #11 — Reviewed by Sumaiya.
+- PR #12 — Reviewed by Vijaha.
+- PR #13 — Reviewed by Vijaha.
+- PR #14 — Reviewed by Sinthu.
+- PR #15 — Reviewed by Sumaiya.
+
+### E3 Pending Work
+
+- Complete FR-03 overlapping-booking validation.
+- Integrate conflict checks with Staff approval.
+- Implement FR-04 Staff approval/rejection.
+- Complete final negative and integration tests.
+
+**Note:** E2 demonstrates substantially working FR-00, FR-01 and FR-02, together with initial FR-03 progress.
