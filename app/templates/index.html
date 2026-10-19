@@ -9,20 +9,24 @@
     <title>Lab Equipment Booking System</title>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f6f9;
             margin: 0;
-            padding: 40px 15px;
+            padding: 30px 15px;
         }
 
         .container {
-            max-width: 650px;
+            max-width: 750px;
             margin: 40px auto;
             padding: 35px;
             background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 3px 12px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
 
@@ -30,22 +34,40 @@
             color: #253858;
         }
 
+        h2 {
+            color: #1e293b;
+        }
+
         p {
             color: #475569;
             line-height: 1.6;
         }
 
+        .role {
+            margin: 20px 0;
+            font-size: 17px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin: 25px 0;
+        }
+
         .btn {
             display: inline-block;
-            padding: 12px 22px;
-            margin: 8px;
             background-color: #2563eb;
             color: white;
+            padding: 13px 20px;
+            border-radius: 7px;
             text-decoration: none;
-            border-radius: 6px;
             border: none;
             cursor: pointer;
             font-size: 15px;
+            font-family: Arial, sans-serif;
         }
 
         .btn:hover {
@@ -56,99 +78,137 @@
             background-color: #dc2626;
         }
 
+        .logout:hover {
+            background-color: #b91c1c;
+        }
+
+        .logout-form {
+            margin-top: 20px;
+        }
+
         .status {
-            margin-top: 25px;
-            padding: 12px;
+            margin-top: 30px;
+            padding: 15px;
             background-color: #e0f2fe;
-            border-radius: 6px;
+            border-radius: 7px;
+            color: #253858;
         }
 
         .message {
-            padding: 10px;
+            padding: 12px;
             background-color: #dcfce7;
-            margin: 12px 0;
             border-radius: 6px;
+            margin: 12px 0;
         }
     </style>
 </head>
 
 <body>
 
-    <main class="container">
+<main class="container">
 
-        <h1>Lab Equipment Booking System</h1>
+    <h1>Lab Equipment Booking System</h1>
 
-        <p>
-            Welcome to the Lab Equipment Booking System.
+    <p>
+        Welcome to the Lab Equipment Booking System.
+    </p>
+
+    <p>
+        Students can request laboratory equipment
+        bookings, and lab staff can manage equipment
+        and booking requests.
+    </p>
+
+    {% for message in get_flashed_messages() %}
+        <p class="message" role="status">
+            {{ message }}
+        </p>
+    {% endfor %}
+
+    {% if current_user.is_authenticated %}
+
+        <h2>
+            Welcome, {{ current_user.username }}!
+        </h2>
+
+        <p class="role">
+            Your Role:
+            <strong>{{ current_user.role }}</strong>
         </p>
 
-        <p>
-            Students can request laboratory equipment
-            bookings, and lab staff can manage equipment
-            and booking requests.
-        </p>
+        <div class="buttons">
 
-        {% for message in get_flashed_messages() %}
-            <p class="message" role="status">
-                {{ message }}
-            </p>
-        {% endfor %}
+            <!-- Equipment catalogue: Student and Staff -->
+            <a
+                class="btn"
+                href="{{ url_for('equipment.catalogue') }}"
+            >
+                Equipment Catalogue
+            </a>
 
-        {% if current_user.is_authenticated %}
+            <!-- Student booking features -->
+            {% if not current_user.is_staff %}
 
-            <h2>Welcome, {{ current_user.username }}!</h2>
+                <a
+                    class="btn"
+                    href="{{ url_for('booking.new') }}"
+                >
+                    Request Equipment
+                </a>
 
-            <p>
-                Your Role:
-                <strong>{{ current_user.role }}</strong>
-            </p>
-	<a class="btn"
-   		href="{{ url_for('equipment.catalogue') }}">
+                <a
+                    class="btn"
+                    href="{{ url_for('booking.mine') }}"
+                >
+                    My Booking Requests
+                </a>
 
+            {% endif %}
 
-{% if not current_user.is_staff %}
-
-    <a class="btn"
-       href="{{ url_for('booking.new') }}">
-        Request Equipment
-    </a>
-
-    <a class="btn"
-       href="{{ url_for('booking.mine') }}">
-        My Booking Requests
-    </a>
-
-{% endif %}
-
-   		Equipment Catalogue
-	</a>
+            <!-- Staff-only area -->
             {% if current_user.is_staff %}
+
                 <a
                     class="btn"
                     href="{{ url_for('auth.staff_page') }}"
                 >
                     Staff Area
                 </a>
+
             {% endif %}
 
-            <form
-                method="POST"
-                action="{{ url_for('auth.logout') }}"
+        </div>
+
+        <!-- Secure POST logout -->
+        <form
+            class="logout-form"
+            method="POST"
+            action="{{ url_for('auth.logout') }}"
+        >
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
             >
-                <input
-                    type="hidden"
-                    name="csrf_token"
-                    value="{{ csrf_token() }}"
-                >
 
-                <button class="btn logout" type="submit">
-                    Logout
-                </button>
-            </form>
+            <button
+                class="btn logout"
+                type="submit"
+            >
+                Logout
+            </button>
+        </form>
 
-        {% else %}
+    {% else %}
 
-            <h2>Get Started</h2>
+        <h2>Get Started</h2>
+
+        <p>
+            Register a Student account or log in
+            to access the system.
+        </p>
+
+        <div class="buttons">
 
             <a
                 class="btn"
@@ -164,14 +224,16 @@
                 Login
             </a>
 
-        {% endif %}
-
-        <div class="status">
-            <strong>Project Status:</strong>
-            E2 - Accounts and Authentication
         </div>
 
-    </main>
+    {% endif %}
+
+    <div class="status">
+        <strong>Project Status:</strong>
+        E2 - Intermediate Review
+    </div>
+
+</main>
 
 </body>
 </html>
