@@ -1,10 +1,15 @@
 
-"""Booking time validation rules for FR-03."""
+"""Booking validation rules for FR-03."""
 
 from datetime import datetime, timedelta
 
+from .extensions import db
+from .models.booking import Booking
+
 MIN_DURATION = timedelta(minutes=30)
 MAX_DURATION = timedelta(hours=4)
+
+ACTIVE_STATUSES = ("Pending", "Approved")
 
 
 def validate_booking_slot(
@@ -14,7 +19,7 @@ def validate_booking_slot(
     *,
     now=None,
 ):
-    """Return an error message or None for a valid time slot."""
+    """Validate booking date, time and duration."""
 
     current_time = datetime.now() if now is None else now
 
@@ -43,3 +48,31 @@ def validate_booking_slot(
         return "Booking cannot be longer than 4 hours."
 
     return None
+
+
+def has_booking_conflict(
+    equipment_id,
+    booking_date,
+    start_time,
+    end_time,
+    *,
+    exclude_booking_id=None,
+):
+    """Check whether an active booking overlaps the requested slot."""
+
+    statement = db.select(Booking.id).where(
+        Booking.equipment_id == equipment_id,
+        Booking.booking_date == booking_date,
+        Booking.status.in_(ACTIVE_STATUSES),
+        Booking.start_time < end_time,
+        Booking.end_time > start_time,
+    )
+
+    if exclude_booking_id is not None:
+        statement = statement.where(
+            Booking.id != exclude_booking_id
+        )
+
+    return db.session.scalar(
+        statement.limit(1)
+    ) is not None
