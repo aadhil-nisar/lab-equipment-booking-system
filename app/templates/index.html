@@ -82,6 +82,10 @@
             background-color: #b91c1c;
         }
 
+        .logout-form {
+            margin-top: 20px;
+        }
+
         .status {
             margin-top: 30px;
             padding: 15px;
@@ -184,7 +188,9 @@
         </div>
 
         <!-- Secure Logout Form -->
+        <!-- Secure POST logout -->
         <form
+            class="logout-form"
             method="POST"
             action="{{ url_for('auth.logout') }}"
         >
