@@ -3,12 +3,21 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
 
-    <title>Staff Dashboard - Lab Equipment Booking System</title>
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Staff Dashboard - Lab Equipment Booking System
+    </title>
 
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f6f9;
@@ -17,17 +26,26 @@
         }
 
         .container {
-            max-width: 650px;
+            max-width: 750px;
             margin: 40px auto;
             background-color: white;
             padding: 35px;
-            border-radius: 10px;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
 
         h1 {
             color: #253858;
+        }
+
+        h2 {
+            color: #1e293b;
+        }
+
+        p {
+            color: #475569;
+            line-height: 1.6;
         }
 
         .role {
@@ -37,50 +55,95 @@
             margin: 20px 0;
         }
 
-        a {
+        .buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .btn {
             display: inline-block;
             padding: 12px 20px;
-            margin-top: 12px;
             background-color: #2563eb;
             color: white;
             text-decoration: none;
             border-radius: 6px;
+            font-size: 15px;
+        }
+
+        .btn:hover {
+            background-color: #1d4ed8;
+        }
+
+        .home {
+            background-color: #475569;
+        }
+
+        .home:hover {
+            background-color: #334155;
         }
     </style>
 </head>
 
 <body>
-    <main class="container">
 
-        <h1>Staff Dashboard</h1>
+<main class="container">
 
-        <p>
-            Welcome, {{ current_user.username }}!
-        </p>
+    <h1>Staff Dashboard</h1>
 
-        <div class="role">
-            <strong>Role:</strong>
-            {{ current_user.role }}
-        </div>
+    <p>
+        Welcome, {{ current_user.username }}!
+    </p>
 
-        <p>
-            This page is accessible only to Staff accounts.
-        </p>
+    <div class="role">
+        <strong>Role:</strong>
+        {{ current_user.role }}
+    </div>
 
-        <p>
-            Equipment management will be connected
-            during FR-01 development.
-        </p>
+    <p>
+        This page is accessible only to
+        authorized Staff accounts.
+    </p>
 
-        <p>
-            Booking approval functionality is planned
-            for E3.
-        </p>
+    <h2>Staff Management</h2>
 
-        <a href="{{ url_for('index') }}">
+    <p>
+        Staff can manage laboratory equipment,
+        review Student booking requests,
+        and approve or reject valid bookings.
+    </p>
+
+    <div class="buttons">
+
+        <!-- FR-01 Equipment Management -->
+        <a
+            class="btn"
+            href="{{ url_for('equipment.catalogue') }}"
+        >
+            Manage Equipment
+        </a>
+
+        <!-- FR-04 Booking Approval -->
+        <a
+            class="btn"
+            href="{{ url_for('staff_bookings.index') }}"
+        >
+            Manage Booking Requests
+        </a>
+
+        <!-- Homepage -->
+        <a
+            class="btn home"
+            href="{{ url_for('index') }}"
+        >
             Back to Home
         </a>
 
-    </main>
+    </div>
+
+</main>
+
 </body>
 </html>

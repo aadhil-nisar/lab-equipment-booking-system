@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Booking Management</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f6f9;
+               padding: 24px 14px; margin: 0; }
+        main { max-width: 1100px; margin: 25px auto; padding: 28px;
+               background: white; border-radius: 10px; }
+        h1, h2 { color: #253858; }
+        .table-wrap { overflow-x: auto; }
+        table { border-collapse: collapse; width: 100%; margin: 14px 0 28px; }
+        th, td { padding: 11px; text-align: left; border: 1px solid #ddd; }
+        th { background: #e0f2fe; }
+        .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+        .actions form { margin: 0; }
+        .btn { display: inline-block; padding: 9px 13px; border: 0;
+               border-radius: 5px; background: #2563eb; color: white;
+               text-decoration: none; cursor: pointer; font-size: 14px; }
+        .approve { background: #15803d; }
+        .reject { background: #dc2626; }
+        .message { padding: 12px; margin: 12px 0; background: #e0f2fe;
+                   border-radius: 6px; }
+        .pending { color: #a16207; }
+        .approved { color: #15803d; }
+        .rejected { color: #dc2626; }
+    </style>
+</head>
+<body>
+<main>
+    <h1>Staff Booking Management</h1>
+    <p>Welcome, {{ current_user.username }} (Staff).</p>
+    <a class="btn" href="{{ url_for('auth.staff_page') }}">Staff Dashboard</a>
+    <a class="btn" href="{{ url_for('index') }}">Home</a>
+
+    {% for message in get_flashed_messages() %}
+        <p class="message" role="alert">{{ message }}</p>
+    {% endfor %}
+
+    <h2>Pending Requests</h2>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th><th>Student</th><th>Equipment</th>
+                    <th>Date</th><th>Time</th><th>Status</th><th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in pending %}
+                    <tr>
+                        <td>{{ booking.id }}</td>
+                        <td>{{ booking.student.username }}</td>
+                        <td>{{ booking.equipment.name if booking.equipment else 'Unavailable' }}</td>
+                        <td>{{ booking.booking_date.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ booking.start_time.strftime('%H:%M') }}–{{ booking.end_time.strftime('%H:%M') }}</td>
+                        <td class="pending">{{ booking.status }}</td>
+                        <td>
+                            <div class="actions">
+                                <form method="POST" action="{{ url_for('staff_bookings.approve', booking_id=booking.id) }}">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button class="btn approve" type="submit">Approve</button>
+                                </form>
+                                <form method="POST" action="{{ url_for('staff_bookings.reject', booking_id=booking.id) }}">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                    <button class="btn reject" type="submit">Reject</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="7">No Pending booking requests.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <h2>Recent Decisions</h2>
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th><th>Student</th><th>Equipment</th>
+                    <th>Date</th><th>Time</th><th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in history %}
+                    <tr>
+                        <td>{{ booking.id }}</td>
+                        <td>{{ booking.student.username }}</td>
+                        <td>{{ booking.equipment.name if booking.equipment else 'Unavailable' }}</td>
+                        <td>{{ booking.booking_date.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ booking.start_time.strftime('%H:%M') }}–{{ booking.end_time.strftime('%H:%M') }}</td>
+                        <td class="{{ booking.status|lower }}">{{ booking.status }}</td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="6">No decisions yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>

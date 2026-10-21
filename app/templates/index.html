@@ -21,7 +21,7 @@
         }
 
         .container {
-            max-width: 750px;
+            max-width: 800px;
             margin: 40px auto;
             padding: 35px;
             background-color: white;
@@ -114,11 +114,12 @@
     </p>
 
     <p>
-        Students can request laboratory equipment
-        bookings, and lab staff can manage equipment
-        and booking requests.
+        Students can browse laboratory equipment,
+        submit booking requests and track booking statuses.
+        Lab Staff can manage equipment and booking approvals.
     </p>
 
+    <!-- Display Flask messages -->
     {% for message in get_flashed_messages() %}
         <p class="message" role="status">
             {{ message }}
@@ -127,9 +128,8 @@
 
     {% if current_user.is_authenticated %}
 
-        <h2>
-            Welcome, {{ current_user.username }}!
-        </h2>
+        <!-- Logged-in user details -->
+        <h2>Welcome, {{ current_user.username }}!</h2>
 
         <p class="role">
             Your Role:
@@ -138,7 +138,8 @@
 
         <div class="buttons">
 
-            <!-- Equipment catalogue: Student and Staff -->
+            <!-- Equipment Catalogue -->
+            <!-- Available to Students and Staff -->
             <a
                 class="btn"
                 href="{{ url_for('equipment.catalogue') }}"
@@ -146,7 +147,7 @@
                 Equipment Catalogue
             </a>
 
-            <!-- Student booking features -->
+            <!-- Student-specific features -->
             {% if not current_user.is_staff %}
 
                 <a
@@ -165,20 +166,28 @@
 
             {% endif %}
 
-            <!-- Staff-only area -->
+            <!-- Staff-specific features -->
             {% if current_user.is_staff %}
 
                 <a
                     class="btn"
                     href="{{ url_for('auth.staff_page') }}"
                 >
-                    Staff Area
+                    Staff Dashboard
+                </a>
+
+                <a
+                    class="btn"
+                    href="{{ url_for('staff_bookings.index') }}"
+                >
+                    Manage Booking Requests
                 </a>
 
             {% endif %}
 
         </div>
 
+        <!-- Secure Logout Form -->
         <!-- Secure POST logout -->
         <form
             class="logout-form"
@@ -201,11 +210,12 @@
 
     {% else %}
 
+        <!-- Guest User -->
         <h2>Get Started</h2>
 
         <p>
-            Register a Student account or log in
-            to access the system.
+            Register a Student account or
+            log in to access the system.
         </p>
 
         <div class="buttons">
@@ -230,7 +240,7 @@
 
     <div class="status">
         <strong>Project Status:</strong>
-        E2 - Intermediate Review
+        E3 - Final Development and Integration
     </div>
 
 </main>
