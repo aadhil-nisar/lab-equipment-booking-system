@@ -215,10 +215,16 @@ def test_cannot_approve_legacy_overlap(client, app, records):
     assert booking_status(app, booking_id) == "Pending"
 
 
-def test_cannot_approve_overlapping_pending_request(client, app, records):
-    booking_id = records["booking_id"]
+
+def test_staff_can_choose_one_of_two_pending_overlaps(
+    client, app, records
+):
+    """One Pending request can be approved, but not both."""
+
+    first_id = records["booking_id"]
+
     with app.app_context():
-        overlapping = Booking(
+        second = Booking(
             student_id=records["student_id"],
             equipment_id=records["equipment_id"],
             booking_date=future_date(),
@@ -226,12 +232,26 @@ def test_cannot_approve_overlapping_pending_request(client, app, records):
             end_time=time(10, 30),
             status="Pending",
         )
-        db.session.add(overlapping)
+
+        db.session.add(second)
         db.session.commit()
+        second_id = second.id
+
     login(client, "decisionstaff")
-    response = client.post(f"/staff/bookings/{booking_id}/approve")
-    assert response.status_code == 409
-    assert booking_status(app, booking_id) == "Pending"
+
+    first_response = client.post(
+        f"/staff/bookings/{first_id}/approve"
+    )
+
+    assert first_response.status_code == 302
+    assert booking_status(app, first_id) == "Approved"
+
+    second_response = client.post(
+        f"/staff/bookings/{second_id}/approve"
+    )
+
+    assert second_response.status_code == 409
+    assert booking_status(app, second_id) == "Pending"
 
 
 def test_unknown_booking_returns_404(client, records):
