@@ -1,4 +1,6 @@
 
+"""Student booking request routes for FR-02 and FR-03."""
+
 from datetime import date, datetime
 
 from flask import (
@@ -12,7 +14,10 @@ from flask import (
 )
 from flask_login import current_user, login_required
 
-from ..booking_validation import validate_booking_slot
+from ..booking_validation import (
+    has_booking_conflict,
+    validate_booking_slot,
+)
 from ..extensions import db
 from ..models.booking import Booking
 from ..models.equipment import Equipment
@@ -25,13 +30,14 @@ booking_bp = Blueprint(
 
 
 def require_student():
-    """Only Students can submit and view their own requests."""
+    """Allow only Students to access booking request routes."""
     if current_user.role != "Student":
         abort(403)
 
 
 def read_booking_form():
-    """Read and validate basic booking form information."""
+    """Read and validate Student booking request information."""
+
     values = {
         "equipment_id": request.form.get(
             "equipment_id", ""
@@ -47,6 +53,7 @@ def read_booking_form():
         ).strip(),
     }
 
+    # Step 1: Validate form input formats.
     try:
         equipment_id = int(values["equipment_id"])
 
@@ -74,6 +81,7 @@ def read_booking_form():
             "Select equipment and enter a valid date and time.",
         )
 
+    # Step 2: Check that the equipment exists.
     equipment = db.session.get(
         Equipment,
         equipment_id,
@@ -86,6 +94,7 @@ def read_booking_form():
             "Selected equipment does not exist.",
         )
 
+    # Step 3: Reject equipment that is out of service.
     if equipment.status != "Available":
         return (
             values,
@@ -93,7 +102,7 @@ def read_booking_form():
             "Equipment is out of service.",
         )
 
-
+    # Step 4: Validate dates, times and booking duration.
     validation_error = validate_booking_slot(
         booking_date,
         start_time,
@@ -107,7 +116,20 @@ def read_booking_form():
             validation_error,
         )
 
+    # Step 5: Check for overlapping booking requests.
+    if has_booking_conflict(
+        equipment.id,
+        booking_date,
+        start_time,
+        end_time,
+    ):
+        return (
+            values,
+            None,
+            "Equipment is already booked for this time.",
+        )
 
+    # Step 6: Return validated booking information.
     parsed = {
         "equipment_id": equipment.id,
         "booking_date": booking_date,
@@ -118,15 +140,22 @@ def read_booking_form():
     return values, parsed, None
 
 
-@booking_bp.route("/new", methods=["GET", "POST"])
+@booking_bp.route(
+    "/new",
+    methods=["GET", "POST"],
+)
 @login_required
 def new():
-    """Allow a Student to submit a booking request."""
+    """Allow Students to submit booking requests."""
+
     require_student()
 
+    # Display only available equipment in the form.
     available_equipment = db.session.scalars(
         db.select(Equipment)
-        .where(Equipment.status == "Available")
+        .where(
+            Equipment.status == "Available"
+        )
         .order_by(
             Equipment.name.asc(),
             Equipment.id.asc(),
@@ -134,16 +163,20 @@ def new():
     ).all()
 
     if request.method == "POST":
+
+        # Validate all submitted booking details.
         values, parsed, error = read_booking_form()
 
         if error:
             flash(error, "error")
+
             return render_template(
                 "booking/new.html",
                 equipment_items=available_equipment,
                 form_data=values,
             ), 400
 
+        # New booking requests always start as Pending.
         booking = Booking(
             student_id=current_user.id,
             equipment_id=parsed["equipment_id"],
@@ -161,8 +194,11 @@ def new():
             "success",
         )
 
-        return redirect(url_for("booking.mine"))
+        return redirect(
+            url_for("booking.mine")
+        )
 
+    # Display the booking request form.
     return render_template(
         "booking/new.html",
         equipment_items=available_equipment,
@@ -173,12 +209,15 @@ def new():
 @booking_bp.get("/")
 @login_required
 def mine():
-    """Show only the logged-in Student's bookings."""
+    """Display only the current Student's booking requests."""
+
     require_student()
 
     bookings = db.session.scalars(
         db.select(Booking)
-        .where(Booking.student_id == current_user.id)
+        .where(
+            Booking.student_id == current_user.id
+        )
         .order_by(
             Booking.booking_date.desc(),
             Booking.start_time.desc(),

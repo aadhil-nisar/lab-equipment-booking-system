@@ -72,6 +72,8 @@ def has_booking_conflict(
     blocking_statuses=("Pending", "Approved"),
 ):
 
+    blocking_statuses=ACTIVE_STATUSES,
+):
     """Check for overlapping equipment bookings.
 
     Conflict policy:
