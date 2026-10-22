@@ -3,15 +3,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>
-        Staff Dashboard - Lab Equipment Booking System
-    </title>
+    <title>Staff Dashboard - Lab Equipment Booking System</title>
 
     <style>
         * {
@@ -20,27 +15,35 @@
 
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f6f9;
+            background: #f4f6f9;
             margin: 0;
             padding: 40px 15px;
-        }
-
-        .container {
-            max-width: 750px;
-            margin: 40px auto;
-            background-color: white;
-            padding: 35px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        h1 {
             color: #253858;
         }
 
+        .container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .header {
+            padding-bottom: 22px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        h1 {
+            color: #1e3a5f;
+            font-size: 30px;
+            margin: 0 0 10px;
+        }
+
         h2 {
-            color: #1e293b;
+            font-size: 20px;
+            color: #253858;
         }
 
         p {
@@ -48,41 +51,87 @@
             line-height: 1.6;
         }
 
-        .role {
-            background-color: #dcfce7;
-            padding: 12px;
-            border-radius: 6px;
-            margin: 20px 0;
+        .header p {
+            margin: 0;
         }
 
-        .buttons {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 25px;
+        .section-title {
+            margin-top: 30px;
+            margin-bottom: 18px;
+        }
+
+        .management-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: #f8fafc;
+            padding: 25px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        .card h2 {
+            margin: 0 0 12px;
+        }
+
+        .card p {
+            font-size: 14px;
+            min-height: 65px;
+            margin-bottom: 20px;
         }
 
         .btn {
             display: inline-block;
-            padding: 12px 20px;
-            background-color: #2563eb;
+            background: #2563eb;
             color: white;
             text-decoration: none;
+            padding: 12px 18px;
             border-radius: 6px;
-            font-size: 15px;
+            font-size: 14px;
+            text-align: center;
         }
 
         .btn:hover {
-            background-color: #1d4ed8;
+            background: #1d4ed8;
         }
 
-        .home {
-            background-color: #475569;
+        .btn-secondary {
+            background: #475569;
         }
 
-        .home:hover {
-            background-color: #334155;
+        .btn-secondary:hover {
+            background: #334155;
+        }
+
+        .bottom-nav {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        @media (max-width: 650px) {
+            .container {
+                padding: 25px 20px;
+            }
+
+            .management-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .card p {
+                min-height: auto;
+            }
+
+            .card .btn {
+                display: block;
+            }
         }
     </style>
 </head>
@@ -91,53 +140,63 @@
 
 <main class="container">
 
-    <h1>Staff Dashboard</h1>
+    <div class="header">
 
-    <p>
-        Welcome, {{ current_user.username }}!
-    </p>
+        <h1>Staff Dashboard</h1>
 
-    <div class="role">
-        <strong>Role:</strong>
-        {{ current_user.role }}
+        <p>
+            Welcome, <strong>{{ current_user.username }}</strong>!
+            Manage laboratory equipment and booking requests below.
+        </p>
+
     </div>
 
-    <p>
-        This page is accessible only to
-        authorized Staff accounts.
-    </p>
+    <h2 class="section-title">Management Options</h2>
 
-    <h2>Staff Management</h2>
+    <div class="management-grid">
 
-    <p>
-        Staff can manage laboratory equipment,
-        review Student booking requests,
-        and approve or reject valid bookings.
-    </p>
+        <!-- Equipment Management -->
+        <section class="card">
 
-    <div class="buttons">
+            <h2>Equipment Management</h2>
 
-        <!-- FR-01 Equipment Management -->
-        <a
-            class="btn"
-            href="{{ url_for('equipment.catalogue') }}"
-        >
-            Manage Equipment
-        </a>
+            <p>
+                View equipment, add new items,
+                update equipment details
+                and manage availability.
+            </p>
 
-        <!-- FR-04 Booking Approval -->
-        <a
-            class="btn"
-            href="{{ url_for('staff_bookings.index') }}"
-        >
-            Manage Booking Requests
-        </a>
+            <a class="btn"
+               href="{{ url_for('equipment.catalogue') }}">
+                Manage Equipment
+            </a>
 
-        <!-- Homepage -->
-        <a
-            class="btn home"
-            href="{{ url_for('index') }}"
-        >
+        </section>
+
+        <!-- Booking Management -->
+        <section class="card">
+
+            <h2>Booking Management</h2>
+
+            <p>
+                View Pending booking requests,
+                approve valid reservations
+                and reject requests when necessary.
+            </p>
+
+            <a class="btn"
+               href="{{ url_for('staff_bookings.index') }}">
+                Manage Booking Requests
+            </a>
+
+        </section>
+
+    </div>
+
+    <div class="bottom-nav">
+
+        <a class="btn btn-secondary"
+           href="{{ url_for('index') }}">
             Back to Home
         </a>
 
