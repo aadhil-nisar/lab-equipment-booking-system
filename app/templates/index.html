@@ -15,111 +15,150 @@
 
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f6f9;
+            background: #f4f6f9;
             margin: 0;
-            padding: 30px 15px;
+            padding: 40px 15px;
+            color: #253858;
         }
 
         .container {
-            max-width: 800px;
-            margin: 40px auto;
-            padding: 35px;
-            background-color: white;
+            max-width: 900px;
+            margin: 30px auto;
+            background: white;
+            padding: 45px 35px;
             border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
             text-align: center;
         }
 
         h1 {
-            color: #253858;
+            font-size: 32px;
+            margin-bottom: 16px;
+            color: #1e3a5f;
         }
 
         h2 {
-            color: #1e293b;
+            font-size: 24px;
+            color: #253858;
         }
 
         p {
             color: #475569;
-            line-height: 1.6;
+            line-height: 1.7;
         }
 
-        .role {
-            margin: 20px 0;
-            font-size: 17px;
+        .description {
+            max-width: 630px;
+            margin: 0 auto 28px;
+            font-size: 16px;
+        }
+
+        .welcome {
+            margin-top: 28px;
+            padding: 18px;
+            background: #f1f5f9;
+            border-radius: 8px;
+        }
+
+        .welcome h2 {
+            margin: 0 0 8px;
+        }
+
+        .welcome p {
+            margin: 0;
         }
 
         .buttons {
             display: flex;
             justify-content: center;
-            align-items: center;
             flex-wrap: wrap;
             gap: 12px;
-            margin: 25px 0;
+            margin: 28px 0;
         }
 
         .btn {
             display: inline-block;
-            background-color: #2563eb;
-            color: white;
             padding: 13px 20px;
-            border-radius: 7px;
+            background: #2563eb;
+            color: white;
             text-decoration: none;
             border: none;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 15px;
             font-family: Arial, sans-serif;
         }
 
         .btn:hover {
-            background-color: #1d4ed8;
+            background: #1d4ed8;
+        }
+
+        .btn-secondary {
+            background: #475569;
+        }
+
+        .btn-secondary:hover {
+            background: #334155;
         }
 
         .logout {
-            background-color: #dc2626;
+            margin-top: 4px;
+            background: #dc2626;
         }
 
         .logout:hover {
-            background-color: #b91c1c;
-        }
-
-        .logout-form {
-            margin-top: 20px;
-        }
-
-        .status {
-            margin-top: 30px;
-            padding: 15px;
-            background-color: #e0f2fe;
-            border-radius: 7px;
-            color: #253858;
+            background: #b91c1c;
         }
 
         .message {
+            background: #e0f2fe;
             padding: 12px;
-            background-color: #dcfce7;
             border-radius: 6px;
-            margin: 12px 0;
+            margin: 15px 0;
+        }
+
+        .footer {
+            margin-top: 35px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
 
 <body>
-
 <main class="container">
 
     <h1>Lab Equipment Booking System</h1>
 
-    <p>
-        Welcome to the Lab Equipment Booking System.
+    <p class="description">
+        A simple and convenient way to manage
+        laboratory equipment reservations.
+        Students can browse available equipment,
+        submit booking requests and track their status.
+        Lab Staff can manage equipment and review
+        booking requests.
     </p>
 
-    <p>
-        Students can browse laboratory equipment,
-        submit booking requests and track booking statuses.
-        Lab Staff can manage equipment and booking approvals.
-    </p>
-
-    <!-- Display Flask messages -->
     {% for message in get_flashed_messages() %}
         <p class="message" role="status">
             {{ message }}
@@ -128,58 +167,46 @@
 
     {% if current_user.is_authenticated %}
 
-        <!-- Logged-in user details -->
-        <h2>Welcome, {{ current_user.username }}!</h2>
+        <div class="welcome">
+            <h2>Welcome, {{ current_user.username }}!</h2>
 
-        <p class="role">
-            Your Role:
-            <strong>{{ current_user.role }}</strong>
-        </p>
+            <p>
+                Logged in as
+                <strong>{{ current_user.role }}</strong>
+            </p>
+        </div>
 
         <div class="buttons">
 
-            <!-- Equipment Catalogue -->
             <!-- Available to Students and Staff -->
-            <a
-                class="btn"
-                href="{{ url_for('equipment.catalogue') }}"
-            >
+            <a class="btn"
+               href="{{ url_for('equipment.catalogue') }}">
                 Equipment Catalogue
             </a>
 
-            <!-- Student-specific features -->
             {% if not current_user.is_staff %}
 
-                <a
-                    class="btn"
-                    href="{{ url_for('booking.new') }}"
-                >
+                <a class="btn"
+                   href="{{ url_for('booking.new') }}">
                     Request Equipment
                 </a>
 
-                <a
-                    class="btn"
-                    href="{{ url_for('booking.mine') }}"
-                >
+                <a class="btn"
+                   href="{{ url_for('booking.mine') }}">
                     My Booking Requests
                 </a>
 
             {% endif %}
 
-            <!-- Staff-specific features -->
             {% if current_user.is_staff %}
 
-                <a
-                    class="btn"
-                    href="{{ url_for('auth.staff_page') }}"
-                >
+                <a class="btn"
+                   href="{{ url_for('auth.staff_page') }}">
                     Staff Dashboard
                 </a>
 
-                <a
-                    class="btn"
-                    href="{{ url_for('staff_bookings.index') }}"
-                >
+                <a class="btn"
+                   href="{{ url_for('staff_bookings.index') }}">
                     Manage Booking Requests
                 </a>
 
@@ -187,50 +214,38 @@
 
         </div>
 
-        <!-- Secure Logout Form -->
-        <!-- Secure POST logout -->
-        <form
-            class="logout-form"
-            method="POST"
-            action="{{ url_for('auth.logout') }}"
-        >
+        <form method="POST"
+              action="{{ url_for('auth.logout') }}">
+
             <input
                 type="hidden"
                 name="csrf_token"
                 value="{{ csrf_token() }}"
             >
 
-            <button
-                class="btn logout"
-                type="submit"
-            >
+            <button type="submit" class="btn logout">
                 Logout
             </button>
         </form>
 
     {% else %}
 
-        <!-- Guest User -->
         <h2>Get Started</h2>
 
         <p>
-            Register a Student account or
-            log in to access the system.
+            Log in to access the system,
+            or create a Student account to get started.
         </p>
 
         <div class="buttons">
 
-            <a
-                class="btn"
-                href="{{ url_for('auth.register') }}"
-            >
+            <a class="btn"
+               href="{{ url_for('auth.register') }}">
                 Register
             </a>
 
-            <a
-                class="btn"
-                href="{{ url_for('auth.login') }}"
-            >
+            <a class="btn"
+               href="{{ url_for('auth.login') }}">
                 Login
             </a>
 
@@ -238,12 +253,10 @@
 
     {% endif %}
 
-    <div class="status">
-        <strong>Project Status:</strong>
-        E3 - Final Development and Integration
+    <div class="footer">
+        Lab Equipment Booking System
     </div>
 
 </main>
-
 </body>
 </html>
