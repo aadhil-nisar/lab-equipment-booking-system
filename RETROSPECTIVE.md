@@ -119,3 +119,4 @@ The project strengthened understanding of requirement allocation, database appli
 **QA Evidence:** GitHub Actions run [#39727210976](https://github.com/aadhil-nisar/lab-equipment-booking-system/actions/runs/39727210976)
 
 **Retrospective confirmation:** All five members should review this document and confirm that its reflections accurately describe their experience.
+**Retrospective confirmation:** All five members should review this document and confirm that its reflections accurately describe their experience.
