@@ -73,13 +73,16 @@ def approve(booking_id):
         flash(f"Approval blocked: {error}", "error")
         return render_dashboard(409)
 
+
     if has_booking_conflict(
         booking.equipment_id,
         booking.booking_date,
         booking.start_time,
         booking.end_time,
         exclude_booking_id=booking.id,
+        blocking_statuses=("Approved",),
     ):
+
         flash("Approval blocked: conflicting booking exists.", "error")
         return render_dashboard(409)
 

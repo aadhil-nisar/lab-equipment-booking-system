@@ -61,6 +61,7 @@ def validate_booking_slot(
     return None
 
 
+
 def has_booking_conflict(
     equipment_id,
     booking_date,
