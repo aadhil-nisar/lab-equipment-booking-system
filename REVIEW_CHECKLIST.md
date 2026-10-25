@@ -21,7 +21,7 @@ This checklist defines how another team member reviews each Pull Request and rec
 
 ## 2. Functional Correctness
 
-- [ ] Changes match the Issue and acceptance criteria.
+- [x] Changes match the Issue and acceptance criteria.
 - [ ] Expected route and user-interface behavior works.
 - [ ] Invalid inputs are rejected appropriately.
 - [ ] The implemented business rules are followed.
