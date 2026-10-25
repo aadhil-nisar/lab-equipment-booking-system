@@ -69,6 +69,208 @@ For full details, see [REVIEW_CHECKLIST.md](REVIEW_CHECKLIST.md). PR #18's lack 
 - Adjacent slots are not overlapping, because conflict requires `existing.start < new.end` and `existing.end > new.start`.
 - Different dates or different equipment do not conflict.
 
+### Complete Business Rules — FR-00 to FR-04
+
+**Project:** Lab Equipment Booking System  
+**Purpose:** Document the business rules implemented across all five functional requirements.  
+**Implementation:** Flask, Python, SQLite and SQLAlchemy.  
+**Verification:** pytest automated tests and GitHub Actions.
+
+The following 60 rules describe the application's implemented validation, authorization, equipment management, booking and approval behavior.
+
+#### FR-00 — Accounts and Authentication
+
+**Responsible member:** Koparnika  
+**Implementation:** `app/routes/auth.py`, `app/models/user.py`, `app/commands.py`  
+**Tests:** `tests/test_auth.py`
+
+| Rule ID | Business rule |
+|---|---|
+| BR-00-01 | Usernames must contain 3–80 characters, using lowercase letters, numbers or underscores. Input is trimmed and converted to lowercase. |
+| BR-00-02 | Email addresses must follow the accepted email format and contain no more than 120 characters. |
+| BR-00-03 | Account passwords must contain at least 8 characters. |
+| BR-00-04 | Password and confirmation password must match during registration. |
+| BR-00-05 | Two users cannot register with the same username. |
+| BR-00-06 | Two users cannot register with the same email address. |
+| BR-00-07 | Public registration always creates a Student account, regardless of any submitted role value. |
+| BR-00-08 | Passwords must be stored as secure hashes, not plaintext. |
+| BR-00-09 | Login is permitted only when the username exists and the password is correct. |
+| BR-00-10 | Invalid credentials must not authenticate the user. |
+| BR-00-11 | Staff accounts are provisioned through the `create-staff` command. Staff-only pages must reject Student access with HTTP 403. |
+
+**Example:** A Student cannot create a Staff account by changing the registration form's `role` field.
+
+#### FR-01 — Equipment Catalogue and Management
+
+**Responsible member:** Sinthu  
+**Implementation:** `app/routes/equipment.py`, `app/models/equipment.py`  
+**Tests:** `tests/test_equipment.py`, `tests/test_staff_bookings.py`
+
+| Rule ID | Business rule |
+|---|---|
+| BR-01-01 | Only authenticated users can access the Equipment Catalogue. |
+| BR-01-02 | Users can view equipment and filter the catalogue by category. |
+| BR-01-03 | Only Staff can add new equipment. |
+| BR-01-04 | Only Staff can edit equipment details. |
+| BR-01-05 | Only Staff can delete equipment. |
+| BR-01-06 | Equipment names must contain 1–120 characters after trimming whitespace. |
+| BR-01-07 | Equipment categories must contain 1–80 characters after trimming whitespace. |
+| BR-01-08 | Equipment descriptions cannot exceed 2,000 characters. |
+| BR-01-09 | Equipment status must be either `Available` or `Out of service`. |
+| BR-01-10 | Invalid equipment details must be rejected without saving incorrect changes. |
+| BR-01-11 | Equipment with any existing booking history cannot be deleted, even when those bookings are Rejected. |
+
+**Example:** Staff cannot delete a microscope that has an existing booking record. The system returns HTTP 409 Conflict.
+
+#### FR-02 — Student Booking Requests
+
+**Responsible member:** Sumaiya  
+**Implementation:** `app/routes/booking.py`, `app/models/booking.py`  
+**Tests:** `tests/test_booking.py`
+
+| Rule ID | Business rule |
+|---|---|
+| BR-02-01 | Only authenticated Students can create equipment booking requests. Staff accounts cannot submit Student booking requests. |
+| BR-02-02 | A booking request must contain a valid, positive equipment ID. |
+| BR-02-03 | The selected equipment must exist in the database. |
+| BR-02-04 | Students can submit requests only for equipment currently marked Available. |
+| BR-02-05 | Booking dates and times must follow the accepted date and time formats. |
+| BR-02-06 | Booking requests must satisfy the date, time and duration validation rules in FR-03. |
+| BR-02-07 | New booking requests must be rejected when they overlap existing Pending or Approved bookings for the same equipment and date. |
+| BR-02-08 | Every successful new request must start as Pending. The Student ID must come from the authenticated account; Students cannot assign themselves an Approved status. |
+| BR-02-09 | Students can view their own booking history but cannot view other Students' booking records through the My Bookings page. |
+
+**Example:** After a Student submits a valid booking, the system stores the request with status `Pending`.
+
+#### FR-03 — Booking Validation
+
+**Responsible member:** Vijaha  
+**Implementation:** `app/booking_validation.py`, `app/routes/booking.py`  
+**Tests:** `tests/test_booking_validation.py`, `tests/test_booking_overlap.py`
+
+| Rule ID | Business rule |
+|---|---|
+| BR-03-01 | Booking end time must be later than start time. |
+| BR-03-02 | Booking start date and time must be in the future. |
+| BR-03-03 | The minimum booking duration is 30 minutes, inclusive. |
+| BR-03-04 | The maximum booking duration is 240 minutes (4 hours), inclusive. |
+| BR-03-05 | Booking requests for Out-of-service equipment must be rejected. |
+| BR-03-06 | Overlap detection must compare bookings for the same equipment. |
+| BR-03-07 | Overlap detection must compare bookings on the same date. |
+| BR-03-08 | Two bookings overlap when `existing.start_time < requested.end_time` and `existing.end_time > requested.start_time`. |
+| BR-03-09 | Existing Pending bookings block overlapping new Student requests. |
+| BR-03-10 | Existing Approved bookings block overlapping new Student requests. |
+| BR-03-11 | Rejected bookings do not block new booking requests. |
+| BR-03-12 | Adjacent time slots are permitted. Bookings for different equipment or dates do not conflict. |
+
+**Boundary Value Analysis (BVA)**
+
+| Duration | Expected |
+|---|---|
+| 29 minutes | Reject |
+| 30 minutes | Accept |
+| 31 minutes | Accept |
+| 239 minutes | Accept |
+| 240 minutes | Accept |
+| 241 minutes | Reject |
+
+These values test the minimum and maximum duration boundaries.
+
+**Overlap example**
+
+Existing booking: 09:00–10:00
+
+| New booking | Expected |
+|---|---|
+| 08:00–09:00 | No conflict |
+| 08:59–09:30 | Conflict |
+| 09:00–10:00 | Conflict |
+| 09:30–10:30 | Conflict |
+| 09:59–11:00 | Conflict |
+| 10:00–11:00 | No conflict |
+| 08:00–11:00 | Conflict |
+
+The time intervals above are assessed on the same date and for the same equipment.
+
+#### FR-04 — Staff Booking Approval and Status
+
+**Responsible member:** Aadhil  
+**Implementation:** `app/routes/staff_bookings.py`  
+**Tests:** `tests/test_staff_bookings.py`  
+**Pull Requests:** #17 and #18
+
+| Rule ID | Business rule |
+|---|---|
+| BR-04-01 | Users must be authenticated before accessing Staff booking management. |
+| BR-04-02 | Only users with the Staff role can approve, reject or manage booking decisions. Students receive HTTP 403. |
+| BR-04-03 | The Staff dashboard displays Pending requests in date/time order and up to 30 recent Approved or Rejected bookings. |
+| BR-04-04 | Approval and rejection operations must use HTTP POST requests rather than GET. |
+| BR-04-05 | Booking decision requests with unknown booking IDs must return HTTP 404. |
+| BR-04-06 | Only Pending bookings can be approved or rejected. Repeated decisions must be blocked with HTTP 409. |
+| BR-04-07 | Before approval, the selected equipment must still exist and have Available status. |
+| BR-04-08 | Before approval, booking dates, times and durations must be revalidated against FR-03 rules. |
+| BR-04-09 | During Staff approval, overlapping bookings with Approved status block the decision. Other Pending requests do not automatically block approval. |
+| BR-04-10 | The selected booking ID must be excluded from its own conflict check. |
+| BR-04-11 | If an Approved-booking conflict exists, the approval must return HTTP 409 and leave the request Pending. |
+| BR-04-12 | Successful approval must change the booking status to Approved and commit the change to SQLite. |
+| BR-04-13 | Successful rejection must change the status to Rejected and save it. Rejected bookings retain their history, free the time slot, and the updated status is visible in the Student's booking history. |
+
+**Example — Double-booking prevention**
+
+Two existing Pending bookings request the same microscope on the same future date:
+
+- Booking A: 09:00–10:00
+- Booking B: 09:30–10:30
+
+Staff approves Booking A.
+
+Expected result:
+
+- Booking A becomes Approved.
+- Booking B remains Pending.
+- Approving Booking B is blocked with HTTP 409 because it overlaps Booking A.
+
+This rule is tested by:
+
+`test_staff_can_choose_one_of_two_pending_overlaps`
+
+**Main implementation:**
+
+`has_booking_conflict()` is called with `exclude_booking_id=booking.id` and `blocking_statuses=("Approved",)` before changing the booking status.
+
+#### Cross-Module Business Rules
+
+**Responsible members:** Entire development team
+
+| Rule ID | Business rule |
+|---|---|
+| BR-CM-01 | User roles must be restricted to Student and Staff, as enforced by the database model. |
+| BR-CM-02 | Booking statuses must be restricted to Pending, Approved and Rejected, as enforced by the database model. |
+| BR-CM-03 | Protected operations must enforce server-side authorization, and mutating browser forms use POST and CSRF protection. |
+| BR-CM-04 | Invalid operations must not incorrectly modify persisted data. Automated tests verify this for the relevant booking and equipment operations. |
+
+#### Business Rule Verification
+
+Business rules are verified through the automated tests in:
+
+- `tests/test_auth.py` — Authentication and role rules.
+- `tests/test_equipment.py` — Equipment management rules.
+- `tests/test_booking.py` — Student booking rules.
+- `tests/test_booking_validation.py` — Booking duration and date rules.
+- `tests/test_booking_overlap.py` — Overlap and booking-status policies.
+- `tests/test_staff_bookings.py` — Staff approval, rejection and conflict rules.
+
+**Latest verified automated QA evidence (25 October 2026):**
+
+- 97 tests passed.
+- 0 failed.
+- Ruff passed.
+- 96% statement coverage.
+
+**GitHub Actions run:** https://github.com/aadhil-nisar/lab-equipment-booking-system/actions/runs/40149580359
+
+**Note:** These rules document current application behavior. Automated test success does not replace independent review or prove protection against every possible concurrent booking scenario.
+
 ## 3. Environment, Commands and Results
 
 **Framework:** Flask / Flask-SQLAlchemy / Flask-Login / Flask-WTF.  
