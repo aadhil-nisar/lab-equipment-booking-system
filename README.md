@@ -28,13 +28,13 @@ These are actual post-merge GitHub Actions log results, including FR-03 E3 and F
 
 ## 1. Testing Responsibilities and Peer Review
 
-| Member | GitHub | Testing / coordination responsibility |
-|---|---|---|
-| Koparnika | `koparnikasrikaran2002-gif` | FR-00 accounts; Coordinator and GitHub board |
-| Sinthu | `sinthu02` | FR-01 catalogue; Review Lead |
-| Sumaiya | `fathimasumaiya884-collab` | FR-02 requests; Co-Coordinator |
-| Vijaha | `HasVij` | FR-03 validation, BVA/EP, QA Lead |
-| Aadhil | `aadhil-nisar` | FR-04 decisions, integration, CI and regression |
+| Member | Registration Number | GitHub Username | Testing / Coordination Responsibility |
+|---|---|---|---|
+| Aadhil | ASP/2023/061 | `aadhil-nisar` | FR-04 decisions, integration, CI and regression |
+| Koparnika | ASP/2023/082 | `koparnikasrikaran2002-gif` | FR-00 accounts; Coordinator and GitHub board |
+| Sinthu | ASP/2023/163 | `sinthu02` | FR-01 catalogue; Review Lead |
+| Sumaiya | ASB/2023/085 | `fathimasumaiya884-collab` | FR-02 requests; Co-Coordinator |
+| Vijaha | ASB/2023/087 | `HasVij` | FR-03 validation, BVA/EP, QA Lead |
 
 ### Verified Pull Requests
 
